@@ -19,17 +19,20 @@ validation).
 - Lists: posts with pagination, archives by year/month, tags, categories, series
 - Search: client-side index with Ctrl+K modal
 - Code blocks: Shiki dual theme, language label, copy, collapse
+- Math: KaTeX rendered at build time
+- Diagrams: Mermaid loaded on demand, re-rendered on theme change
 - Embeds: button, link card, tabs, Bilibili, Tencent Video (MDX components)
+- Standalone pages: about, resume, timeline, projects
 - Comments: giscus (disabled by default)
 - Feeds: RSS, sitemap, SVG icon sprite endpoint
 
 ## Not ported yet
 
-- Projects, resume, timeline, about pages
-- KaTeX and Mermaid rendering
+- KaTeX and Mermaid are available, but per-page front matter overrides are not
 - Comment providers other than giscus
 - Analytics integrations
 - Localized routes (UI copy is typed, but only `zh-hans` / `en` dictionaries exist)
+- Gallery lightbox and gallery layouts
 
 ## Requirements
 

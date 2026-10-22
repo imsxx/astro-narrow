@@ -67,8 +67,16 @@ column.
 | `layouts/index.json` | `src/pages/search-index.json.ts` | rewritten |
 | `layouts/_partials/features/comments/giscus.html` | `src/components/features/Comments.astro` | rewritten |
 | other comment providers | — | not ported |
-| `layouts/_partials/features/katex.html`, `mermaid.html` | — | not ported |
-| `layouts/timeline.html`, `about.html`, `resume.html`, `projects/*` | — | not ported |
+| `layouts/_partials/features/analytics/*` | — | not ported |
+| `layouts/_partials/features/katex.html` | `remark-math` + `rehype-katex` in `astro.config.ts` | replaced (build-time rendering) |
+| `layouts/_partials/features/mermaid.html` | `src/components/features/Mermaid.astro` | rewritten (dynamic import) |
+| `layouts/_markup/render-codeblock-mermaid.html` | `src/lib/remark/mermaid.ts` | rewritten |
+| `layouts/timeline.html` | `src/pages/timeline.astro` | rewritten (CSS timeline, no HTML splitting) |
+| `layouts/about.html` | `src/pages/about.astro` | rewritten |
+| `layouts/resume.html` | `src/pages/resume.astro` | rewritten (CSS sections, no HTML splitting) |
+| `layouts/projects/list.html` | `src/pages/projects/index.astro` | rewritten |
+| `layouts/projects/single.html` | `src/pages/projects/[slug].astro` | rewritten |
+| `layouts/_partials/content/split-sections.html` | — | replaced (CSS-only timeline/resume layout) |
 
 ## Shortcodes → MDX components
 

@@ -16,6 +16,12 @@ function textOf(node: HastNode): string {
   return node.children.map(textOf).join("")
 }
 
+/** Shiki runs before this plugin and records the language as `dataLanguage`. */
+function languageOf(pre: HastNode): string {
+  const value = pre.properties?.dataLanguage
+  return typeof value === "string" ? value : "text"
+}
+
 function icon(name: string, className: string) {
   return h("svg", { class: className, viewBox: "0 0 24 24", "aria-hidden": "true" }, [
     h("use", { href: `/icons/sprite.svg#icon-${name}` }),
@@ -24,7 +30,7 @@ function icon(name: string, className: string) {
 
 function buildShell(pre: HastNode, index: number) {
   const codeId = `code-${index}`
-  const language = String(pre.properties?.["data-language"] ?? "text")
+  const language = languageOf(pre)
   const display = language === "text" ? "TEXT" : language.toUpperCase()
   const source = textOf(pre)
 
@@ -140,6 +146,11 @@ function buildShell(pre: HastNode, index: number) {
  * header with language label, copy button, optional collapse, and a hidden
  * copy of the raw source.
  */
+function containsMermaid(node: HastNode): boolean {
+  if (node.properties && "data-mermaid" in node.properties) return true
+  return node.children?.some(containsMermaid) ?? false
+}
+
 export function rehypeCodeBlockShell() {
   return (tree: HastNode) => {
     let index = 0
@@ -149,6 +160,7 @@ export function rehypeCodeBlockShell() {
       for (let i = 0; i < node.children.length; i += 1) {
         const child = node.children[i]
         if (child.type === "element" && child.tagName === "pre") {
+          if (containsMermaid(child)) continue
           node.children[i] = buildShell(child, index) as HastNode
           index += 1
         } else {

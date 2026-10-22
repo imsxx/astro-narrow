@@ -1,0 +1,72 @@
+---
+import Base from "@/layouts/Base.astro"
+import Icon from "@/components/Icon.astro"
+import { siteConfig } from "@/config/site"
+import { formatDate, isoDate } from "@/lib/date"
+import { getCollection, render } from "astro:content"
+import { t } from "@/i18n"
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects", ({ data }) => !data.draft)
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }))
+}
+
+const { project } = Astro.props
+const { Content } = await render(project)
+---
+
+<Base
+  title={`${project.data.title} | ${siteConfig.title}`}
+  description={project.data.summary ?? project.data.description}
+  crumbs={[{ label: "项目", href: "/projects" }, { label: project.data.title }]}
+>
+  <header class="mb-8">
+    <h1 class="text-foreground text-2xl leading-tight font-semibold tracking-tight md:text-3xl">
+      {project.data.title}
+    </h1>
+
+    {
+      (project.data.summary ?? project.data.description) && (
+        <p class="text-muted-foreground mt-3 text-base leading-relaxed">
+          {project.data.summary ?? project.data.description}
+        </p>
+      )
+    }
+
+    <div class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+      <time datetime={isoDate(project.data.date)}>{formatDate(project.data.date)}</time>
+      {
+        project.data.link && (
+          <a
+            href={project.data.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-foreground inline-flex items-center gap-1 transition-colors"
+          >
+            <Icon name="external-link" size="xs" />
+            <span>{t.projects.visit}</span>
+          </a>
+        )
+      }
+    </div>
+
+    {
+      project.data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap items-center gap-1.5">
+          {project.data.tags.map((tag) => (
+            <span class="border-border text-muted-foreground inline-flex h-5 items-center rounded-md border px-1.5 text-xs">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </header>
+
+  <article class="prose max-w-none">
+    <Content />
+  </article>
+</Base>

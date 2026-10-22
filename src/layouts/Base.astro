@@ -1,5 +1,6 @@
 ---
 import "@/styles/main.css"
+import "katex/dist/katex.min.css"
 import { siteConfig } from "@/config/site"
 import { colorSchemeKeys } from "@/lib/themes"
 import { t } from "@/i18n"
@@ -9,6 +10,7 @@ import ContextBar from "@/components/ui/ContextBar.astro"
 import Toc from "@/components/ui/Toc.astro"
 import SearchModal from "@/components/ui/SearchModal.astro"
 import NavMenu from "@/components/ui/NavMenu.astro"
+import Mermaid from "@/components/features/Mermaid.astro"
 import Footer from "@/components/ui/Footer.astro"
 import type { SeriesContext } from "@/lib/posts"
 import type { MarkdownHeading } from "astro"
@@ -24,6 +26,7 @@ type Props = {
   series?: SeriesContext | null
   headings?: MarkdownHeading[]
   showReadingProgress?: boolean
+  hasMermaid?: boolean
 }
 
 const {
@@ -35,6 +38,7 @@ const {
   series,
   headings,
   showReadingProgress = siteConfig.readingProgress.enabled,
+  hasMermaid = false,
 } = Astro.props
 
 const hasToc = Boolean(
@@ -180,6 +184,7 @@ const pageStyle = [
     {hasToc && headings && <Toc headings={headings} />}
     <SearchModal />
     <NavMenu />
+    <Mermaid enabled={hasMermaid} />
     <script
       id="search-config"
       type="application/json"
