@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+- Fix: the table of contents panel never opened. `toc.js` was ported verbatim but nothing imported
+  it — upstream loads it conditionally from `head/js.html`, while the Astro layout only pulled in
+  `main.js`. The script now ships with the TOC component, so the dock button, scroll spy and pinning
+  work again.
+
 ## 1.0.1
 
 Synced with upstream 2.0.2:
