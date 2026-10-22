@@ -15,8 +15,8 @@ import { rehypeImageAttrs } from "./src/lib/rehype/image-attrs"
 const katexEnabled = siteConfig.katex.enabled
 
 export default defineConfig({
-  // Replace with your own domain: it drives canonical URLs, the sitemap and robots.txt.
-  site: "https://narrow.imsxx.com",
+  // Drives canonical URLs, the sitemap and robots.txt.
+  site: "https://imsxx.com",
   integrations: [mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

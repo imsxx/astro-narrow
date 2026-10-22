@@ -9,6 +9,7 @@ validation).
 
 - Upstream: `hugo-narrow v2.0.0`
 - Built on Astro 7 + Tailwind CSS 4
+- Used by [imsxx.com](https://imsxx.com)
 
 ## What works
 
@@ -102,8 +103,9 @@ from `pnpm check` instead.
 The output is fully static: build with `pnpm build`, publish `dist/`. Any static host works
 (Cloudflare Pages, Vercel, Netlify, S3, nginx).
 
-Before the first deploy, change `site` in `astro.config.ts` to your own domain — it drives canonical
-URLs, the sitemap and `robots.txt`.
+`site` in `astro.config.ts` drives canonical URLs, the sitemap and `robots.txt`. It currently points
+at the author's blog; change it to your own domain, especially if you deploy this build somewhere
+other than that domain.
 
 ```ts
 // astro.config.ts
