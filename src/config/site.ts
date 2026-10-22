@@ -196,7 +196,7 @@ export const siteConfig = siteSchema.parse({
   lang: "zh-hans",
   keywords: ["Astro", "Blog", "Theme", "Hugo Narrow"],
   shortName: "Narrow",
-  images: ["/images/og-default.png"],
+  images: ["/images/og-default.avif"],
   favicon: { svg: "/favicon.svg" },
   pwa: {
     backgroundColor: "#ffffff",

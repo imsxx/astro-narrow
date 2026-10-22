@@ -59,7 +59,7 @@ const hasToc = Boolean(
 
 const canonical = new URL(Astro.url.pathname, Astro.site)
 const ogImage = new URL(
-  image ?? siteConfig.images[0] ?? "/images/og-default.png",
+  image ?? siteConfig.images[0] ?? "/images/og-default.avif",
   Astro.site,
 )
 
@@ -85,6 +85,20 @@ const pageStyle = [
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical}>
     <link rel="icon" href={siteConfig.favicon.svg} type="image/svg+xml">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta
+      name="theme-color"
+      content={siteConfig.pwa.themeColor}
+      media="(prefers-color-scheme: light)"
+    >
+    <meta
+      name="theme-color"
+      content={siteConfig.pwa.darkThemeColor}
+      media="(prefers-color-scheme: dark)"
+    >
+    {siteConfig.pwa.appleTouchIcon && (
+      <link rel="apple-touch-icon" href={siteConfig.pwa.appleTouchIcon} />
+    )}
     <link
       rel="alternate"
       type="application/rss+xml"
