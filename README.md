@@ -93,18 +93,55 @@ Biome 负责脚本、配置和数据文件。`.astro` 不在格式化范围内�
 
 ## 部署
 
-产物是全静态的：`pnpm build` 之后发布 `dist/` 即可。Cloudflare Pages、Vercel、Netlify、S3、nginx 都行。
+产物是全静态的，`pnpm build` 之后发布 `dist/` 即可。下面三种方式，按省心程度排。
+
+### 一、交给 AI agent
+
+如果手边有能读写 GitHub 仓库的 agent（Claude Code、Codex、WorkBuddy 都行），把这句话发给它：
+
+> 帮我部署 https://github.com/imsxx/astro-narrow，域名用 blog.example.com
+
+agent 需要走完四步：
+
+1. clone 仓库，`corepack pnpm install`
+2. 把 `astro.config.ts` 里的 `site` 改成目标域名
+3. `corepack pnpm build`
+4. 把 `dist/` 发布到任意静态托管，绑定域名
+
+Node 用 `.node-version` 里的 24。如果站点部署在子路径（`example.com/blog`），还要把 `base` 设成 `"/blog"`——这一步容易漏，漏了所有站内链接都会指向根目录。
+
+### 二、一键部署按钮
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/imsxx/astro-narrow)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/imsxx/astro-narrow)
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/imsxx/astro-narrow)
+
+三点说明：
+
+- **Cloudflare 按钮部署的是 Workers，不是 Pages。** Cloudflare 的一键按钮目前只支持 Workers 应用，仓库里的 `wrangler.jsonc` 已经把 `dist/` 配成静态资源目录，`not_found_handling` 指向 404 页面。
+- **Vercel 和 Netlify 会自动识别 Astro**，不需要额外配置。
+- 按钮会把仓库复制一份到你的账号，之后改的是你自己那份，不会影响上游。
+
+### 三、手动构建
+
+```bash
+corepack pnpm install
+corepack pnpm build
+# 把 dist/ 上传到服务器，或交给 CI 发布
+```
+
+`site` 和 `base` 会贯穿到站内链接、封面图、图标 sprite、搜索索引、manifest 与 RSS：
 
 ```ts
 // astro.config.ts
 export default defineConfig({
   site: "https://example.com", // 你的域名，决定 canonical、sitemap 和 robots.txt
-  base: "/", // 部署在子路径时改成 "/repo"
+  base: "/", // 子路径部署改成 "/repo"
   // ...
 })
 ```
-
-`site` 和 `base` 都会贯穿到站内链接、封面图、图标 sprite、搜索索引、manifest 与 RSS。`base` 用于 GitHub Pages 之类的子路径部署，根目录部署保持 `"/"`。
 
 Node 版本由 CI 读取 `.node-version`，请保持在 24；Node 25 目前在 Windows 上构建会崩。
 

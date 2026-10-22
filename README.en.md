@@ -102,8 +102,50 @@ from `pnpm check` instead.
 
 ## Deploy
 
-The output is fully static: build with `pnpm build`, publish `dist/`. Any static host works
-(Cloudflare Pages, Vercel, Netlify, S3, nginx).
+The output is fully static: build with `pnpm build`, publish `dist/`. Three ways, easiest first.
+
+### 1. Hand it to an AI agent
+
+If you have an agent with repo access (Claude Code, Codex, WorkBuddy), send it this:
+
+> Deploy https://github.com/imsxx/astro-narrow for me, use blog.example.com as the domain.
+
+Four steps the agent has to complete:
+
+1. Clone the repo, `corepack pnpm install`
+2. Set `site` in `astro.config.ts` to your domain
+3. `corepack pnpm build`
+4. Publish `dist/` to any static host and attach the domain
+
+Use Node 24 (see `.node-version`). If the site lives under a subpath (`example.com/blog`), also set
+`base` to `"/blog"` — easy to miss, and every internal link points at the root without it.
+
+### 2. One-click buttons
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/imsxx/astro-narrow)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/imsxx/astro-narrow)
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/imsxx/astro-narrow)
+
+Three notes:
+
+- **The Cloudflare button deploys a Worker, not a Pages project.** Cloudflare's deploy button only
+  supports Workers applications. The bundled `wrangler.jsonc` points static assets at `dist/` with a
+  404 fallback.
+- **Vercel and Netlify detect Astro automatically** — no extra configuration.
+- The button copies the repo into your account. You edit your copy; upstream is untouched.
+
+### 3. Build it yourself
+
+```bash
+corepack pnpm install
+corepack pnpm build
+# upload dist/ to your server, or let CI publish it
+```
+
+Both `site` and `base` flow through internal links, cover images, the icon sprite, the search index,
+the web manifest and the feed:
 
 ```ts
 // astro.config.ts
@@ -113,10 +155,6 @@ export default defineConfig({
   // ...
 })
 ```
-
-Both values flow through internal links, cover images, the icon sprite, the search index, the web
-manifest and the feed. Keep `base` at `"/"` unless the site lives under a subpath such as a GitHub
-Pages project page.
 
 Node version: CI reads `.node-version`. Keep it at 24; Node 25 currently crashes during Astro's
 build on Windows.
