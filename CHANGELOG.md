@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.2.2
+
+- Internal: move `markdown.remarkPlugins` / `markdown.rehypePlugins` to `markdown.processor` with
+  `unified()` from `@astrojs/markdown-remark`. Astro 7 deprecates the old options and will remove them
+  in a future major. No behaviour change — KaTeX, Mermaid, alerts, galleries and heading anchors all
+  render as before.
+
+## 1.2.2
+
+- Internal: move `markdown.remarkPlugins` / `markdown.rehypePlugins` to `markdown.processor` with
+  `unified()` from `@astrojs/markdown-remark`. Astro 7 deprecates the old options and will remove them
+  in a future major. No behaviour change — KaTeX, Mermaid, alerts, galleries and heading anchors all
+  render as before.
+
 ## 1.2.1
 
 - Fix: the favicon and apple-touch-icon links ignored `base`, so they 404'd on subpath deployments.

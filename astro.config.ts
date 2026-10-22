@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config"
 import tailwindcss from "@tailwindcss/vite"
 import sitemap from "@astrojs/sitemap"
+import { unified } from "@astrojs/markdown-remark"
 import mdx from "@astrojs/mdx"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
@@ -25,24 +26,26 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [
-      remarkMermaid,
-      ...(katexEnabled ? [remarkMath] : []),
-    ] as never[],
-    rehypePlugins: [
-      ...(katexEnabled
-        ? ([
-            rehypeKatexGuard,
-            [rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }],
-          ] as never[])
-        : []),
-      rehypeAlert,
-      rehypeBaseLinks,
-      rehypeHeadingAnchors,
-      rehypeCodeBlockShell,
-      rehypeImageFigure,
-      rehypeImageAttrs,
-    ],
+    processor: unified({
+      remarkPlugins: [
+        remarkMermaid,
+        ...(katexEnabled ? [remarkMath] : []),
+      ] as never[],
+      rehypePlugins: [
+        ...(katexEnabled
+          ? [
+              rehypeKatexGuard,
+              [rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }],
+            ]
+          : []),
+        rehypeAlert,
+        rehypeBaseLinks,
+        rehypeHeadingAnchors,
+        rehypeCodeBlockShell,
+        rehypeImageFigure,
+        rehypeImageAttrs,
+      ] as never[],
+    }),
     shikiConfig: {
       themes: {
         light: "github-light",
