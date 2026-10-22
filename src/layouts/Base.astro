@@ -1,0 +1,163 @@
+---
+import "@/styles/main.css"
+import { siteConfig } from "@/config/site"
+import { colorSchemeKeys } from "@/lib/themes"
+import { t } from "@/i18n"
+import Dock from "@/components/ui/Dock.astro"
+import ReadingProgress from "@/components/ui/ReadingProgress.astro"
+
+type Props = {
+  title: string
+  description?: string
+  image?: string
+  noindex?: boolean
+  showReadingProgress?: boolean
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  image,
+  noindex = false,
+  showReadingProgress = siteConfig.readingProgress.enabled,
+} = Astro.props
+
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const ogImage = new URL(
+  image ?? siteConfig.images[0] ?? "/images/og-default.png",
+  Astro.site,
+)
+
+const pageStyle = [
+  `--content-width-base: ${siteConfig.contentWidth}`,
+  `--backdrop-blur-base: ${siteConfig.backdropBlur}px`,
+  `--grain-size-base: ${siteConfig.grainSize}`,
+].join("; ")
+---
+
+<!doctype html>
+<html
+  lang={siteConfig.lang}
+  dir="ltr"
+  data-theme={siteConfig.colorScheme}
+  data-toc-pinned="false"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={siteConfig.favicon.svg} type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.title} href="/rss.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {siteConfig.keywords.length > 0 && (
+      <meta name="keywords" content={siteConfig.keywords.join(", ")} />
+    )}
+
+    <script
+      is:inline
+      define:vars={{
+        schemes: colorSchemeKeys,
+        defaultScheme: siteConfig.colorScheme,
+        defaultBlur: siteConfig.backdropBlur,
+        defaultGrain: siteConfig.grainSize,
+      }}
+    >
+      // Restore theme, width, blur and grain before first paint.
+      ;(() => {
+        const root = document.documentElement
+        const read = (key) => {
+          try {
+            return localStorage.getItem(key)
+          } catch {
+            return null
+          }
+        }
+
+        const storedScheme = read("colorScheme")
+        root.setAttribute(
+          "data-theme",
+          schemes.includes(storedScheme) ? storedScheme : defaultScheme,
+        )
+
+        const width = Number.parseInt(read("contentWidth"), 10)
+        if (Number.isInteger(width) && width >= 40 && width <= 90) {
+          root.style.setProperty("--content-width", `${width}rem`)
+        }
+
+        const storedBlur = Number.parseInt(read("backdropBlur"), 10)
+        const blur =
+          Number.isInteger(storedBlur) && storedBlur >= 0 && storedBlur <= 24
+            ? storedBlur
+            : defaultBlur
+        root.style.setProperty("--backdrop-blur", `${blur}px`)
+        root.style.setProperty(
+          "--surface-alpha",
+          `${blur > 0 ? Math.max(68, 92 - Math.round((blur / 24) * 20)) : 100}%`,
+        )
+
+        const storedGrain = Number.parseInt(read("grainSize"), 10)
+        const grain =
+          Number.isInteger(storedGrain) && storedGrain >= 0 && storedGrain <= 100
+            ? storedGrain
+            : defaultGrain
+        root.style.setProperty("--grain-size", `${Math.round(64 + grain * 2.5)}px`)
+        root.style.setProperty(
+          "--grain-opacity",
+          grain > 0 ? (0.04 + (grain / 100) * 0.2).toFixed(3) : "0",
+        )
+
+        const pinned = read("tocPinned")
+        if (pinned === "true" || pinned === "false") {
+          root.setAttribute("data-toc-pinned", pinned)
+        }
+
+        const modes = ["light", "dark", "system"]
+        const stored = read("theme")
+        const mode = modes.includes(stored) ? stored : "system"
+        const applyMode = () => {
+          const current = (() => {
+            const value = read("theme")
+            return modes.includes(value) ? value : "system"
+          })()
+          root.classList.toggle(
+            "dark",
+            current === "dark" ||
+              (current === "system" &&
+                matchMedia("(prefers-color-scheme: dark)").matches),
+          )
+        }
+        applyMode()
+        matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyMode)
+        void mode
+      })()
+    </script>
+
+    <slot name="head" />
+  </head>
+
+  <body class="min-h-screen">
+    <div id="bg-grain" aria-hidden="true"></div>
+    <a class="skip-link" href="#main-content">{t.ui.skipToContent}</a>
+    {showReadingProgress && <ReadingProgress />}
+
+    <div id="page-container" style={pageStyle}>
+      <slot />
+    </div>
+
+    <Dock />
+    <slot name="overlays" />
+
+    <script>
+      import "@/scripts/main.js"
+    </script>
+  </body>
+</html>

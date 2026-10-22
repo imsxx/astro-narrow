@@ -1,0 +1,13 @@
+{{- $analytics := site.Params.analytics | default dict -}}
+{{- $provider := $analytics.provider | default "" -}}
+{{- if $provider -}}
+  {{- if eq $provider "baidu" -}}
+    {{ partial "features/analytics/baidu.html" . }}
+  {{- else if eq $provider "clarity" -}}
+    {{ partial "features/analytics/clarity.html" . }}
+  {{- else if eq $provider "google" -}}
+    {{ partial "features/analytics/google.html" . }}
+  {{- else if eq $provider "umami" -}}
+    {{ partial "features/analytics/umami.html" . }}
+  {{- end -}}
+{{- end -}}

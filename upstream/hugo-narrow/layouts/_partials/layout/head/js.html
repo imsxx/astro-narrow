@@ -1,0 +1,33 @@
+{{/* 主脚本 */}}
+{{ partial "layout/script.html" (dict "path" "js/main.js") }}
+
+{{/* 目录功能脚本 - TOC 启用且当前页面有标题时才加载 */}}
+{{- $tocConfig := partial "config/toc.html" . -}}
+{{- if and $tocConfig.enabled (ne .TableOfContents `<nav id="TableOfContents"></nav>`) -}}
+  {{ partial "layout/script.html" (dict "path" "js/toc.js") }}
+{{- end -}}
+
+{{/* Gallery JavaScript */}}
+{{ if .Store.Get "galleryEnabled" }}
+  <script
+    src="https://cdn.jsdelivr.net/npm/smart-gallery@latest/dist/smart-gallery.umd.js"
+    defer
+  ></script>
+{{ end }}
+
+{{ if or (.Store.Get "galleryEnabled") (.Store.Get "lightboxEnabled") }}
+  {{ partial "layout/script.html" (dict "path" "js/gallery.js") }}
+{{ end }}
+
+{{/* 自定义 JS 文件 */}}
+{{- range resources.Match "js/custom/*.js" }}
+  {{ partial "layout/script.html" (dict
+    "resource" .
+    "targetPath" (printf "js/custom/%s" .Name)
+    )
+  }}
+{{- end }}
+
+{{ if .Site.Params.analytics.provider -}}
+  {{ partial "features/analytics.html" . }}
+{{- end }}
