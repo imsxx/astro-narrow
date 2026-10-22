@@ -70,6 +70,7 @@ export async function seriesInfo(post: Post) {
   if (index < 0 || parts.length < 2) return null
   return {
     name,
+    href: `/series/${name}/`,
     parts,
     current: index + 1,
     total: parts.length,
@@ -77,6 +78,8 @@ export async function seriesInfo(post: Post) {
     next: parts[index + 1],
   }
 }
+
+export type SeriesContext = NonNullable<Awaited<ReturnType<typeof seriesInfo>>>
 
 export async function getRelated(post: Post, limit = 3): Promise<Post[]> {
   const tags = new Set(post.data.tags)

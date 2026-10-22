@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "../config/site"
 import { en } from "./en"
 import { zhHans, type Dict } from "./zh-hans"
 

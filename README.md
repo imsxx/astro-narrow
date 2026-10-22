@@ -8,19 +8,39 @@ wherever they replace hand-rolled Hugo logic (image pipeline, code highlighting,
 validation).
 
 - Upstream: `hugo-narrow v2.0.0`
-- Status: skeleton — layout shell, styling, dock, appearance panel and a single post route work.
-  Lists, taxonomies, search, series, comments and shortcodes are not ported yet.
+- Built on Astro 7 + Tailwind CSS 4
+
+## What works
+
+- Layout shell: content column, floating dock, breadcrumb context bar, footer
+- Appearance panel: 12 colour schemes, light/dark/system, width / blur / grain sliders
+- Posts: header meta, prose typography, TOC panel with pin, reading progress, prev/next,
+  related posts, series progress bar and popover
+- Lists: posts with pagination, archives by year/month, tags, categories, series
+- Search: client-side index with Ctrl+K modal
+- Code blocks: Shiki dual theme, language label, copy, collapse
+- Embeds: button, link card, tabs, Bilibili, Tencent Video (MDX components)
+- Comments: giscus (disabled by default)
+- Feeds: RSS, sitemap, SVG icon sprite endpoint
+
+## Not ported yet
+
+- Projects, resume, timeline, about pages
+- KaTeX and Mermaid rendering
+- Comment providers other than giscus
+- Analytics integrations
+- Localized routes (UI copy is typed, but only `zh-hans` / `en` dictionaries exist)
 
 ## Requirements
 
-- Node.js 22.12+
+- Node.js 22.23.4+ (Astro 7)
 - pnpm 10
 
 ## Development
 
 ```bash
 pnpm install
-pnpm dev        # http://localhost:4321
+pnpm dev
 pnpm build
 pnpm preview
 ```
@@ -30,27 +50,27 @@ pnpm preview
 ```
 src/
 ├── config/       # site config, validated with Zod
-├── content/      # posts and standalone pages
+├── content/      # posts (.md / .mdx) and standalone pages
 ├── components/
-│   ├── ui/       # dock, appearance panel, reading progress
-│   ├── content/  # cards, lists, meta blocks
-│   ├── embeds/   # shortcode equivalents
-│   └── features/ # comments, analytics, math, diagrams
+│   ├── ui/       # dock, context bar, TOC, search, appearance, nav menu
+│   ├── content/  # cards, grids, list feed, pagination, related posts
+│   ├── embeds/   # MDX replacements for Hugo shortcodes
+│   └── features/ # comments
 ├── layouts/      # Base layout
-├── pages/        # routes, feed, sprite endpoint
-├── lib/          # data aggregation, dates, theme list
+├── pages/        # routes, feed, search index, sprite endpoint
+├── lib/          # data aggregation, dates, pagination, rehype plugins
 ├── i18n/         # typed dictionaries
-├── styles/       # Tailwind entry + upstream stylesheets (copied verbatim)
+├── styles/       # Tailwind entry + upstream stylesheets
 ├── icons/        # upstream SVG icons
-└── scripts/      # upstream interaction scripts (copied, selectors unchanged)
+└── scripts/      # upstream interaction scripts
 upstream/         # read-only snapshot of the upstream theme, used for diffing
 ```
 
 ## Porting policy
 
-`src/styles` and `src/icons` are copied from upstream without modification. `src/scripts` is copied
-too; only selectors that depend on Hugo-specific markup need adapting. Everything else is written
-as Astro components. See [PORTING.md](./PORTING.md) for the file-by-file mapping.
+`src/styles`, `src/icons` and `src/scripts` are copied from upstream. Only `main.css` gained one
+`@import` for the Shiki bridge. Everything else is written as Astro components. See
+[PORTING.md](./PORTING.md) for the file-by-file mapping.
 
 ## License
 

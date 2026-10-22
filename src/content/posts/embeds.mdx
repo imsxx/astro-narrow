@@ -1,0 +1,69 @@
+---
+title: "嵌入组件：按钮、标签页与视频"
+summary: "用 MDX 组件替代 Hugo shortcode，验证按钮、标签页、链接卡和视频嵌入的渲染。"
+date: 2026-10-16T10:00:00+08:00
+categories: ["组件"]
+tags: ["组件", "MDX"]
+---
+
+import Button from "@/components/embeds/Button.astro"
+import LinkCard from "@/components/embeds/LinkCard.astro"
+import Tabs from "@/components/embeds/Tabs.astro"
+import Tab from "@/components/embeds/Tab.astro"
+import Bilibili from "@/components/embeds/Bilibili.astro"
+
+Hugo 用 `{{</* button */>}}` 这样的 shortcode 插入组件，Astro 里改成 MDX 组件，参数是真正的 props，写错会直接报错。
+
+## 按钮
+
+<Button url="https://astro.build" target="_blank" icon="external-link" text="Astro 官网" />
+
+<Button url="/posts" variant="outline" text="浏览文章" />
+
+<Button variant="secondary" size="lg" text="大号次要按钮" />
+
+<Button url="https://github.com" variant="#FF5733" text="自定义颜色" />
+
+## 链接卡
+
+<LinkCard
+  title="hugo-narrow"
+  url="https://github.com/tom2almighty/hugo-narrow"
+  description="本主题的上游项目，AGPL-3.0 协议。"
+  icon="github"
+/>
+
+## 标签页
+
+<Tabs>
+  <Tab label="npm">
+    使用 npm 安装依赖：
+
+    ```bash
+    npm install
+    npm run dev
+    ```
+  </Tab>
+  <Tab label="pnpm">
+    使用 pnpm 安装依赖：
+
+    ```bash
+    pnpm install
+    pnpm dev
+    ```
+  </Tab>
+  <Tab label="yarn">
+    使用 yarn 安装依赖：
+
+    ```bash
+    yarn
+    yarn dev
+    ```
+  </Tab>
+</Tabs>
+
+## 视频
+
+<Bilibili vid="BV1xx411c7mD" />
+
+组件里的参数都是类型化的，`variant` 传错会在构建时报错，这是 shortcode 做不到的。

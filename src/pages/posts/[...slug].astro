@@ -1,8 +1,10 @@
 ---
 import Base from "@/layouts/Base.astro"
 import Icon from "@/components/Icon.astro"
+import RelatedPosts from "@/components/content/RelatedPosts.astro"
+import Comments from "@/components/features/Comments.astro"
 import { siteConfig } from "@/config/site"
-import { getPosts, readingTime, summaryOf, wordCount } from "@/lib/posts"
+import { getPosts, readingTime, seriesInfo, summaryOf, wordCount } from "@/lib/posts"
 import { formatDate, isoDate } from "@/lib/date"
 import { render } from "astro:content"
 import { t } from "@/i18n"
@@ -17,17 +19,19 @@ export async function getStaticPaths() {
 
 const { post, prev, next } = Astro.props
 const { Content, headings } = await render(post)
+const series = await seriesInfo(post)
 
-const hasToc = post.data.toc && headings.some((h) => h.depth >= 2 && h.depth <= 3)
 const license = siteConfig.post.license
+const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
 ---
 
 <Base
   title={`${post.data.title} | ${siteConfig.title}`}
   description={summaryOf(post)}
+  crumbs={crumbs}
+  series={series}
+  headings={post.data.toc ? headings : []}
 >
-  <main id="main-content" tabindex="-1" class="page-main">
-    <div class="page-content">
       <header class="mb-8">
         <div class="post-meta mb-8">
           <h1 class="text-foreground text-2xl leading-tight font-semibold tracking-tight md:text-3xl">
@@ -107,6 +111,7 @@ const license = siteConfig.post.license
           )
         }
       </nav>
-    </div>
-  </main>
+
+      <RelatedPosts post={post} />
+      <Comments />
 </Base>

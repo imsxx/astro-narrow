@@ -87,5 +87,6 @@
   @import "./prose.typography.css";
   @import "./prose.misc.css";
   @import "./prose.code.css";
+  @import "./shiki.css";
   @import "./custom.css";
 }

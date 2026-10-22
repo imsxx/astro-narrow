@@ -1,0 +1,36 @@
+---
+import { siteConfig } from "@/config/site"
+import { t } from "@/i18n"
+
+const { enabled, system, giscus } = siteConfig.comments
+const show = enabled && system === "giscus" && Boolean(giscus.repo && giscus.repoId)
+---
+
+{
+  show && (
+    <section id="comments" class="border-border mt-12 border-t pt-8">
+      <h2 class="text-foreground mb-4 text-lg font-semibold tracking-tight">
+        {t.comments.title}
+      </h2>
+      <div class="giscus" />
+      <script
+        is:inline
+        src="https://giscus.app/client.js"
+        data-repo={giscus.repo}
+        data-repo-id={giscus.repoId}
+        data-category={giscus.category}
+        data-category-id={giscus.categoryId}
+        data-mapping={giscus.mapping}
+        data-strict={giscus.strict}
+        data-reactions-enabled={giscus.reactionsEnabled}
+        data-emit-metadata={giscus.emitMetadata}
+        data-input-position={giscus.inputPosition}
+        data-theme={giscus.theme}
+        data-lang={giscus.lang}
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async
+      />
+    </section>
+  )
+}

@@ -5,12 +5,24 @@ import { colorSchemeKeys } from "@/lib/themes"
 import { t } from "@/i18n"
 import Dock from "@/components/ui/Dock.astro"
 import ReadingProgress from "@/components/ui/ReadingProgress.astro"
+import ContextBar from "@/components/ui/ContextBar.astro"
+import Toc from "@/components/ui/Toc.astro"
+import SearchModal from "@/components/ui/SearchModal.astro"
+import NavMenu from "@/components/ui/NavMenu.astro"
+import Footer from "@/components/ui/Footer.astro"
+import type { SeriesContext } from "@/lib/posts"
+import type { MarkdownHeading } from "astro"
+
+type Crumb = { label: string; href?: string }
 
 type Props = {
   title: string
   description?: string
   image?: string
   noindex?: boolean
+  crumbs?: Crumb[]
+  series?: SeriesContext | null
+  headings?: MarkdownHeading[]
   showReadingProgress?: boolean
 }
 
@@ -19,8 +31,16 @@ const {
   description = siteConfig.description,
   image,
   noindex = false,
+  crumbs,
+  series,
+  headings,
   showReadingProgress = siteConfig.readingProgress.enabled,
 } = Astro.props
+
+const hasToc = Boolean(
+  siteConfig.toc.enabled &&
+    headings?.some((heading) => heading.depth === 2 || heading.depth === 3),
+)
 
 const canonical = new URL(Astro.url.pathname, Astro.site)
 const ogImage = new URL(
@@ -121,23 +141,18 @@ const pageStyle = [
         }
 
         const modes = ["light", "dark", "system"]
-        const stored = read("theme")
-        const mode = modes.includes(stored) ? stored : "system"
         const applyMode = () => {
-          const current = (() => {
-            const value = read("theme")
-            return modes.includes(value) ? value : "system"
-          })()
+          const value = read("theme")
+          const mode = modes.includes(value) ? value : "system"
           root.classList.toggle(
             "dark",
-            current === "dark" ||
-              (current === "system" &&
+            mode === "dark" ||
+              (mode === "system" &&
                 matchMedia("(prefers-color-scheme: dark)").matches),
           )
         }
         applyMode()
         matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyMode)
-        void mode
       })()
     </script>
 
@@ -150,10 +165,26 @@ const pageStyle = [
     {showReadingProgress && <ReadingProgress />}
 
     <div id="page-container" style={pageStyle}>
-      <slot />
+      {crumbs && crumbs.length > 0 && <ContextBar crumbs={crumbs} series={series} />}
+
+      <main id="main-content" tabindex="-1" class="page-main">
+        <div class="page-content">
+          <slot />
+        </div>
+      </main>
+
+      <Footer />
     </div>
 
-    <Dock />
+    <Dock showToc={hasToc} showComments={siteConfig.comments.enabled} />
+    {hasToc && headings && <Toc headings={headings} />}
+    <SearchModal />
+    <NavMenu />
+    <script
+      id="search-config"
+      type="application/json"
+      set:html={JSON.stringify({ searchIndexURL: "/search-index.json" })}
+    />
     <slot name="overlays" />
 
     <script>

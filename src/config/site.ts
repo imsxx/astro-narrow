@@ -97,6 +97,21 @@ const siteSchema = z.object({
           "comentario",
         ])
         .default("giscus"),
+      giscus: z
+        .object({
+          repo: z.string().default(""),
+          repoId: z.string().default(""),
+          category: z.string().default(""),
+          categoryId: z.string().default(""),
+          mapping: z.string().default("pathname"),
+          strict: z.string().default("0"),
+          reactionsEnabled: z.string().default("1"),
+          emitMetadata: z.string().default("0"),
+          inputPosition: z.string().default("bottom"),
+          theme: z.string().default("preferred_color_scheme"),
+          lang: z.string().default("zh-CN"),
+        })
+        .default({}),
     })
     .default({}),
   analytics: z
@@ -129,6 +144,11 @@ const siteSchema = z.object({
     .object({
       enabled: z.boolean().default(true),
       showOnHomepage: z.boolean().default(false),
+    })
+    .default({}),
+  pagination: z
+    .object({
+      pageSize: z.number().int().positive().default(10),
     })
     .default({}),
   nav: z.array(navItemSchema),
@@ -187,6 +207,7 @@ export const siteConfig = siteSchema.parse({
     collapse: { enabled: true, defaultState: "expanded", maxLines: 30, collapsedHeight: 120 },
   },
   readingProgress: { enabled: true, showOnHomepage: false },
+  pagination: { pageSize: 10 },
   nav: [
     { label: "文章", href: "/posts", icon: "posts" },
     { label: "归档", href: "/archives", icon: "archive" },

@@ -1,0 +1,17 @@
+---
+type Props = {
+  id?: string
+}
+
+const { id } = Astro.props
+---
+
+<div
+  id={id}
+  class="tabs-wrapper border-border bg-card text-foreground my-6 rounded-lg border"
+  data-tabs
+>
+  <div class="tabs-panels px-3 pb-3 sm:px-4 sm:pb-4">
+    <slot />
+  </div>
+</div>
