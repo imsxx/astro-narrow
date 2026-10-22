@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.1
+
+Synced with upstream 2.0.2:
+
+- Dock container is a `<div role="toolbar">` instead of `<nav>`, fixing the Lighthouse
+  `aria-allowed-role` audit
+- Sprite preload removed (external `<use>` references cannot reuse it); the menu button is back to a
+  single icon and the table of contents uses the new `toc` icon
+- `announcement.autoClose` added: set it to a number of seconds to dismiss the banner automatically
+- Icon set trimmed from 73 to 48 SVGs, sprite down from ~27 KB to ~17.5 KB
+
 ## 1.0.0
 
 First public release. Port of [hugo-narrow](https://github.com/tom2almighty/hugo-narrow) v2.0.1 to

@@ -9,7 +9,7 @@ and visual output follow the upstream theme; the implementation uses Astro's nat
 wherever they replace hand-rolled Hugo logic (image pipeline, code highlighting, TOC, config
 validation).
 
-- Upstream: `hugo-narrow v2.0.1`
+- Upstream: `hugo-narrow v2.0.2`
 - Built on Astro 7 + Tailwind CSS 4
 - Live demo: [imsxx.com](https://imsxx.com) — the author's blog, running this theme unmodified
 

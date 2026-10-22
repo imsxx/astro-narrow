@@ -1,6 +1,6 @@
 # Porting map
 
-Upstream snapshot: `hugo-narrow v2.0.1`.
+Upstream snapshot: `hugo-narrow v2.0.2`.
 Status values: **copied** (verbatim, safe to overwrite), **rewritten** (same behaviour, Astro
 structure), **replaced** (upstream logic dropped because Astro has a native equivalent).
 

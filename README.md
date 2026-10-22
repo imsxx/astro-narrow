@@ -6,7 +6,7 @@
 
 这不是逐行翻译模板，而是按 Astro 的方式重写了一遍：功能与视觉对齐上游，实现上凡是能换成 Astro 原生能力的地方都换掉了（图片管线、代码高亮、目录、配置校验）。
 
-- 上游版本：`hugo-narrow v2.0.1`
+- 上游版本：`hugo-narrow v2.0.2`
 - 技术栈：Astro 7 + Tailwind CSS 4
 - 在线示例：[imsxx.com](https://imsxx.com)——作者的博客，跑的就是这个主题，没有二次定制
 

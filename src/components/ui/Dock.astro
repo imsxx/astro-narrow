@@ -14,7 +14,7 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
 import { url } from "@/lib/url"
 ---
 
-<nav
+<div
   id="dock"
   role="toolbar"
   aria-label={t.ui.dockAriaLabel}
@@ -43,12 +43,7 @@ import { url } from "@/lib/url"
       aria-expanded="false"
       popovertarget="nav-menu-popover"
     >
-      <span class="dock-menu-icon-expanded">
-        <Icon name="categories" size="sm" />
-      </span>
-      <span class="dock-menu-icon-collapsed">
-        <Icon name="menu" size="sm" />
-      </span>
+      <Icon name="menu" size="sm" />
     </button>
 
     <button
@@ -73,7 +68,7 @@ import { url } from "@/lib/url"
             aria-controls="toc-panel"
             aria-expanded="false"
           >
-            <Icon name="book-open" size="sm" />
+            <Icon name="toc" size="sm" />
           </button>
         </>
       )}
@@ -108,7 +103,7 @@ import { url } from "@/lib/url"
       <Icon name="arrow-up" size="sm" />
     </button>
   </div>
-</nav>
+</div>
 
 {siteConfig.announcement.enabled && (
     <p hidden data-announcement-fallback>
