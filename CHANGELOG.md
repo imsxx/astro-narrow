@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- The home page now honours `home.contentOrder` instead of rendering two hard-coded sections, and
+  implements the upstream "featured projects" block: projects with `featured: true` show up on the
+  home page (up to four), with a "view all" link when the projects collection has more entries.
+
 ## 1.0.2
 
 - Fix: the table of contents panel never opened. `toc.js` was ported verbatim but nothing imported
