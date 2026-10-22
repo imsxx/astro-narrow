@@ -46,8 +46,7 @@ const hasMeta = Boolean(date) || Boolean(tags?.length) || Boolean(count)
         <a href={href} class="after:absolute after:inset-0">{title}</a>
       </h3>
 
-      {
-        external ? (
+      {external ? (
           <a
             href={external}
             target="_blank"
@@ -65,20 +64,16 @@ const hasMeta = Boolean(date) || Boolean(tags?.length) || Boolean(count)
           >
             <Icon name="arrow-right" size="sm" class="icon-directional" />
           </span>
-        )
-      }
+        )}
     </div>
 
-    {
-      summary && (
+    {summary && (
         <p class="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
           {summary}
         </p>
-      )
-    }
+      )}
 
-    {
-      hasMeta && (
+    {hasMeta && (
         <div class="text-muted-foreground mt-auto flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-1 text-xs">
           {date && (
             <time datetime={isoDate(date)} class="tabular-nums">
@@ -102,7 +97,6 @@ const hasMeta = Boolean(date) || Boolean(tags?.length) || Boolean(count)
             </div>
           )}
         </div>
-      )
-    }
+      )}
   </div>
 </article>

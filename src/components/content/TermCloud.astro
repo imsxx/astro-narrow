@@ -24,8 +24,7 @@ const sizeFor = (count: number): string => {
 ---
 
 <div class="flex flex-wrap gap-2.5">
-  {
-    terms.map((term) => (
+  {terms.map((term) => (
       <a
         href={term.href}
         class:list={[
@@ -38,6 +37,5 @@ const sizeFor = (count: number): string => {
           {term.count}
         </span>
       </a>
-    ))
-  }
+    ))}
 </div>

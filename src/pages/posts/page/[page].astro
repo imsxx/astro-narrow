@@ -18,7 +18,12 @@ export async function getStaticPaths() {
 
 const { pageNumber } = Astro.props
 const all = await getPosts()
-const result = paginate(all, pageNumber, siteConfig.pagination.pageSize, "/posts")
+const result = paginate(
+  all,
+  pageNumber,
+  siteConfig.pagination.pageSize,
+  "/posts",
+)
 ---
 
 <Base
@@ -26,11 +31,11 @@ const result = paginate(all, pageNumber, siteConfig.pagination.pageSize, "/posts
   noindex={true}
   crumbs={[{ label: "文章", href: "/posts" }, { label: `第 ${result.current} 页` }]}
 >
-      <PageHeader title="文章" meta={t.list.pages(result.total)} />
-      <PostFeed
-        posts={result.items}
-        base="/posts"
-        current={result.current}
-        totalPages={result.totalPages}
-      />
+  <PageHeader title="文章" meta={t.list.pages(result.total)} />
+  <PostFeed
+    posts={result.items}
+    base="/posts"
+    current={result.current}
+    totalPages={result.totalPages}
+  />
 </Base>

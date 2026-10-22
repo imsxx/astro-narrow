@@ -18,13 +18,13 @@ export async function getStaticPaths() {
 const { name, posts } = Astro.props
 ---
 
-<Base title={`${name} | ${siteConfig.title}`}
+<Base
+  title={`${name} | ${siteConfig.title}`}
   crumbs={[{ label: "系列", href: "/series" }, { label: name }]}
 >
-      <PageHeader title={name} meta={t.list.pages(posts.length)} />
-      <CardGrid columns={1}>
-        {
-          posts.map((post, index) => (
+  <PageHeader title={name} meta={t.list.pages(posts.length)} />
+  <CardGrid columns={1}>
+    {posts.map((post, index) => (
             <div class="flex items-start gap-3">
               <span class="text-muted-foreground mt-4 w-6 shrink-0 text-right text-xs tabular-nums">
                 {String(index + 1).padStart(2, "0")}
@@ -39,7 +39,6 @@ const { name, posts } = Astro.props
                 />
               </div>
             </div>
-          ))
-        }
-      </CardGrid>
+          ))}
+  </CardGrid>
 </Base>

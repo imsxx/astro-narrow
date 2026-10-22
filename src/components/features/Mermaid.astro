@@ -6,8 +6,7 @@ type Props = {
 const { enabled = true } = Astro.props
 ---
 
-{
-  enabled && (
+{enabled && (
     <script>
       const blocks = [...document.querySelectorAll<HTMLElement>(".mermaid")]
       if (blocks.length > 0) {
@@ -45,8 +44,7 @@ const { enabled = true } = Astro.props
         })
       }
     </script>
-  )
-}
+  )}
 
 <style>
   :global(svg[id^="mermaid-"]) {

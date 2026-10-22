@@ -49,7 +49,9 @@ export async function getCategories(): Promise<Map<string, Post[]>> {
 
 export async function getSeries(): Promise<Map<string, Post[]>> {
   const posts = (await getPosts()).filter((post) => post.data.series)
-  const grouped = groupBy(posts, (post) => (post.data.series ? [post.data.series] : []))
+  const grouped = groupBy(posts, (post) =>
+    post.data.series ? [post.data.series] : [],
+  )
   for (const [, list] of grouped) {
     list.sort(
       (a, b) =>
@@ -91,12 +93,19 @@ export async function getRelated(post: Post, limit = 3): Promise<Post[]> {
       score: entry.data.tags.filter((tag) => tags.has(tag)).length,
     }))
     .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || b.entry.data.date.getTime() - a.entry.data.date.getTime())
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        b.entry.data.date.getTime() - a.entry.data.date.getTime(),
+    )
     .slice(0, limit)
     .map(({ entry }) => entry)
 }
 
-function groupBy(posts: Post[], keysOf: (post: Post) => string[]): Map<string, Post[]> {
+function groupBy(
+  posts: Post[],
+  keysOf: (post: Post) => string[],
+): Map<string, Post[]> {
   const map = new Map<string, Post[]>()
   for (const post of posts) {
     for (const key of new Set(keysOf(post))) {
@@ -105,7 +114,5 @@ function groupBy(posts: Post[], keysOf: (post: Post) => string[]): Map<string, P
       else map.set(key, [post])
     }
   }
-  return new Map(
-    [...map].sort(([a], [b]) => a.localeCompare(b, "zh-Hans-CN")),
-  )
+  return new Map([...map].sort(([a], [b]) => a.localeCompare(b, "zh-Hans-CN")))
 }

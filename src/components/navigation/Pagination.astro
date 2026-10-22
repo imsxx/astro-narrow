@@ -20,8 +20,7 @@ const disabledClass =
   "border-border text-muted-foreground/40 inline-flex h-8 cursor-not-allowed items-center gap-1 rounded-md border px-2 text-sm"
 ---
 
-{
-  totalPages > 1 && (
+{totalPages > 1 && (
     <nav
       class="mt-10 flex items-center justify-between gap-2"
       aria-label={t.nav.pageInfo(current, totalPages)}
@@ -69,5 +68,4 @@ const disabledClass =
         </span>
       )}
     </nav>
-  )
-}
+  )}

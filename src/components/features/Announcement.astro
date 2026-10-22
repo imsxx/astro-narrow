@@ -21,8 +21,7 @@ const id = Array.from(announcement.message)
   .slice(0, 8)
 ---
 
-{
-  show && (
+{show && (
     <div
       id="site-announcement"
       class:list={["site-tip", tone]}
@@ -44,5 +43,4 @@ const id = Array.from(announcement.message)
         </button>
       )}
     </div>
-  )
-}
+  )}

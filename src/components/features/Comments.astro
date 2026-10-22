@@ -16,10 +16,9 @@ const {
   system = siteConfig.comments.system,
 } = Astro.props
 
-const cfg = siteConfig.comments[system as keyof typeof siteConfig.comments] as unknown as Record<
-  string,
-  string
->
+const cfg = siteConfig.comments[
+  system as keyof typeof siteConfig.comments
+] as unknown as Record<string, string>
 
 /** The one field each provider cannot work without. */
 const requiredField: Record<string, string> = {
@@ -36,8 +35,7 @@ const ready = enabled && Boolean(cfg?.[requiredField[system]])
 const pagePath = Astro.url.pathname
 ---
 
-{
-  ready && (
+{ready && (
     <section id="comments" class="border-border mt-10 border-t pt-8">
       <h2 class="text-foreground mb-4 text-lg font-semibold tracking-tight">
         {t.comments.title}
@@ -61,11 +59,9 @@ const pagePath = Astro.url.pathname
         )}
       </div>
     </section>
-  )
-}
+  )}
 
-{
-  ready && system === "giscus" && (
+{ready && system === "giscus" && (
     <script
       is:inline
       src="https://giscus.app/client.js"
@@ -84,11 +80,9 @@ const pagePath = Astro.url.pathname
       crossorigin="anonymous"
       async
     />
-  )
-}
+  )}
 
-{
-  ready && system === "disqus" && (
+{ready && system === "disqus" && (
     <script is:inline define:vars={{ shortname: cfg.shortname, pageUrl: url, pageTitle: title }}>
       var disqus_config = function () {
         this.page.url = pageUrl
@@ -103,11 +97,9 @@ const pagePath = Astro.url.pathname
         ;(d.head || d.body).appendChild(s)
       })()
     </script>
-  )
-}
+  )}
 
-{
-  ready && system === "utterances" && (
+{ready && system === "utterances" && (
     <>
       <script
         is:inline
@@ -147,11 +139,9 @@ const pagePath = Astro.url.pathname
         document.addEventListener("themeChanged", syncUtterancesTheme)
       </script>
     </>
-  )
-}
+  )}
 
-{
-  ready && system === "waline" && (
+{ready && system === "waline" && (
     <>
       <link rel="stylesheet" href="https://unpkg.com/@waline/client@3.16.1/dist/waline.css" />
       <script is:inline type="module" define:vars={{ serverURL: cfg.serverURL, lang: cfg.lang ?? "zh-CN" }}>
@@ -164,11 +154,9 @@ const pagePath = Astro.url.pathname
         })
       </script>
     </>
-  )
-}
+  )}
 
-{
-  ready && system === "artalk" && (
+{ready && system === "artalk" && (
     <script is:inline type="module" define:vars={{ server: cfg.server, site: cfg.site ?? "", locale: cfg.locale ?? "zh-CN" }}>
       import Artalk from "https://unpkg.com/artalk@2.9.1/dist/Artalk.mjs"
       Artalk.init({
@@ -179,11 +167,9 @@ const pagePath = Astro.url.pathname
         darkMode: "auto",
       })
     </script>
-  )
-}
+  )}
 
-{
-  ready && system === "twikoo" && (
+{ready && system === "twikoo" && (
     <script is:inline type="module" define:vars={{ envId: cfg.envId, lang: cfg.lang ?? "zh-CN", region: cfg.region ?? "", pagePath }}>
       const { init } = await import("https://unpkg.com/twikoo@1.6.39/dist/twikoo.all.min.js")
       init({
@@ -194,11 +180,9 @@ const pagePath = Astro.url.pathname
         lang,
       })
     </script>
-  )
-}
+  )}
 
-{
-  ready && system === "comentario" && (
+{ready && system === "comentario" && (
     <>
       <script
         is:inline
@@ -206,5 +190,4 @@ const pagePath = Astro.url.pathname
         src={`${cfg.server.replace(/\/+$/, "")}/comentario.js`}
       />
     </>
-  )
-}
+  )}

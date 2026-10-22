@@ -8,7 +8,10 @@ import { t } from "@/i18n"
 
 const categories = await getCategories()
 const terms = [...categories]
-  .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0], "zh-Hans-CN"))
+  .sort(
+    (a, b) =>
+      b[1].length - a[1].length || a[0].localeCompare(b[0], "zh-Hans-CN"),
+  )
   .map(([name, posts]) => ({
     name,
     count: posts.length,
@@ -16,15 +19,11 @@ const terms = [...categories]
   }))
 ---
 
-<Base title={`分类 | ${siteConfig.title}`}
-  crumbs={[{ label: "分类" }]}
->
-      <PageHeader title="分类" meta={t.list.terms(terms.length)} />
-      {
-        terms.length > 0 ? (
+<Base title={`分类 | ${siteConfig.title}`} crumbs={[{ label: "分类" }]}>
+  <PageHeader title="分类" meta={t.list.terms(terms.length)} />
+  {terms.length > 0 ? (
           <TermCloud terms={terms} />
         ) : (
           <p class="text-muted-foreground py-8 text-sm">{t.article.empty}</p>
-        )
-      }
+        )}
 </Base>

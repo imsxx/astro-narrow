@@ -36,13 +36,10 @@ const monthLabel = (year: number, month: number) =>
   }).format(new Date(year, month - 1, 1))
 ---
 
-<Base title={`归档 | ${siteConfig.title}`}
-  crumbs={[{ label: "归档" }]}
->
-      <PageHeader title="归档" meta={t.list.pages(posts.length)} />
+<Base title={`归档 | ${siteConfig.title}`} crumbs={[{ label: "归档" }]}>
+  <PageHeader title="归档" meta={t.list.pages(posts.length)} />
 
-      {
-        posts.length > 0 ? (
+  {posts.length > 0 ? (
           <div class="relative">
             <div class="bg-border absolute top-0 bottom-0 left-4 w-0.5" aria-hidden="true" />
 
@@ -96,6 +93,5 @@ const monthLabel = (year: number, month: number) =>
           </div>
         ) : (
           <p class="text-muted-foreground py-8 text-sm">{t.article.empty}</p>
-        )
-      }
+        )}
 </Base>

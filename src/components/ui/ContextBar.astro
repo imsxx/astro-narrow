@@ -17,8 +17,7 @@ const trail: Crumb[] = [{ label: t.nav.home, href: "/" }, ...crumbs]
 <header id="context-bar">
   <nav aria-label={t.nav.breadcrumb} class="context-crumbs">
     <ol class="crumb-trail">
-      {
-        trail.map((item, index) => (
+      {trail.map((item, index) => (
           <>
             {index > 0 && (
               <li class="crumb-sep" aria-hidden="true">
@@ -44,13 +43,11 @@ const trail: Crumb[] = [{ label: t.nav.home, href: "/" }, ...crumbs]
               )}
             </li>
           </>
-        ))
-      }
+        ))}
     </ol>
   </nav>
 
-  {
-    series && (
+  {series && (
       <>
         <div class="series-bar">
           <button
@@ -199,6 +196,5 @@ const trail: Crumb[] = [{ label: t.nav.home, href: "/" }, ...crumbs]
           </ol>
         </div>
       </>
-    )
-  }
+    )}
 </header>

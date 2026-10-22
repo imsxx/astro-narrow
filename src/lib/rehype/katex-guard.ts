@@ -18,7 +18,10 @@ function isMathNode(node: HastNode): boolean {
   const list = Array.isArray(classes) ? classes : [classes]
   const tokens = list.flatMap((name) => String(name ?? "").split(/\s+/))
   return tokens.some(
-    (token) => token === "math" || token === "language-math" || token.startsWith("math-"),
+    (token) =>
+      token === "math" ||
+      token === "language-math" ||
+      token.startsWith("math-"),
   )
 }
 

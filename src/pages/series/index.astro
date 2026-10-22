@@ -21,12 +21,9 @@ const items = [...series]
   .sort((a, b) => b.latest.getTime() - a.latest.getTime())
 ---
 
-<Base title={`系列 | ${siteConfig.title}`}
-  crumbs={[{ label: "系列" }]}
->
-      <PageHeader title="系列" meta={t.list.terms(items.length)} />
-      {
-        items.length > 0 ? (
+<Base title={`系列 | ${siteConfig.title}`} crumbs={[{ label: "系列" }]}>
+  <PageHeader title="系列" meta={t.list.terms(items.length)} />
+  {items.length > 0 ? (
           <CardGrid columns={2}>
             {items.map((item) => (
               <Card
@@ -40,6 +37,5 @@ const items = [...series]
           </CardGrid>
         ) : (
           <p class="text-muted-foreground py-8 text-sm">{t.article.empty}</p>
-        )
-      }
+        )}
 </Base>

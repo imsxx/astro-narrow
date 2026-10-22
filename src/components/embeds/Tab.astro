@@ -14,7 +14,9 @@ const text = label ?? (lang ? lang.toUpperCase() : "Tab")
   data-tabs-panel
   data-tab-label={text}
 >
-  <div class="tabs-panel-content px-4 pt-4 *:first:mt-0 *:last:mb-0 [&_.code-block-container:first-child]:mt-0 [&_.code-block-container:last-child]:mb-0">
+  <div
+    class="tabs-panel-content px-4 pt-4 *:first:mt-0 *:last:mb-0 [&_.code-block-container:first-child]:mt-0 [&_.code-block-container:last-child]:mb-0"
+  >
     <slot />
   </div>
 </section>

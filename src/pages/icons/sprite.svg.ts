@@ -7,7 +7,10 @@ const icons = import.meta.glob("../../icons/*.svg", {
 }) as Record<string, string>
 
 function toSymbol(path: string, raw: string): string {
-  const name = path.split("/").pop()!.replace(/\.svg$/, "")
+  const name = path
+    .split("/")
+    .pop()!
+    .replace(/\.svg$/, "")
   const content = raw
     .replace(/\s+width="[^"]*"/g, "")
     .replace(/\s+height="[^"]*"/g, "")

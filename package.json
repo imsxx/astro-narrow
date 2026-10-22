@@ -14,6 +14,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "i18n": "node scripts/build-i18n.mjs && biome format --write src/i18n",
     "upstream:pull": "bash scripts/upstream-pull.sh"
   },
   "dependencies": {
@@ -29,11 +32,27 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@biomejs/biome": "2.4.16",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.17",
     "hastscript": "^9.0.1",
     "smol-toml": "^1.9.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
-  }
+  },
+  "keywords": [
+    "astro",
+    "astro-theme",
+    "blog",
+    "tailwind",
+    "hugo-narrow"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imsxx/astro-narrow"
+  },
+  "bugs": {
+    "url": "https://github.com/imsxx/astro-narrow/issues"
+  },
+  "homepage": "https://github.com/imsxx/astro-narrow#readme"
 }

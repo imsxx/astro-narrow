@@ -32,7 +32,9 @@ function hasCount(value) {
 }
 
 function hasRange(value) {
-  return /\{\{\s*\.current\s*\}\}/.test(value) || /\{\{\s*\.total\s*\}\}/.test(value)
+  return (
+    /\{\{\s*\.current\s*\}\}/.test(value) || /\{\{\s*\.total\s*\}\}/.test(value)
+  )
 }
 
 function convertValue(key, value, indent) {
@@ -84,7 +86,10 @@ for (const file of files) {
   const locale = file.replace(/\.toml$/, "")
   const data = parse(readFileSync(join(source, file), "utf8"))
   const body = Object.entries(data)
-    .map(([key, value]) => `  ${JSON.stringify(key)}: ${convertValue(key, value, 1)},`)
+    .map(
+      ([key, value]) =>
+        `  ${JSON.stringify(key)}: ${convertValue(key, value, 1)},`,
+    )
     .join("\n")
 
   const name = locale.replace(/-/g, "_")

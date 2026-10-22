@@ -29,8 +29,7 @@ const itemClass =
 >
   <div class="max-h-[75dvh] overflow-y-auto" data-nav-menu>
     <nav class="space-y-3" aria-label={t.nav.menu}>
-      {
-        topLinks.length > 0 && (
+      {topLinks.length > 0 && (
           <fieldset>
             <legend class="text-muted-foreground mb-1.5 px-1 text-xs font-medium">
               {t.nav.menu}
@@ -48,11 +47,9 @@ const itemClass =
               ))}
             </div>
           </fieldset>
-        )
-      }
+        )}
 
-      {
-        groups.map((group, index) => (
+      {groups.map((group, index) => (
           <fieldset
             class:list={[
               (topLinks.length > 0 || index > 0) && "border-border border-t pt-3",
@@ -74,8 +71,7 @@ const itemClass =
               ))}
             </div>
           </fieldset>
-        ))
-      }
+        ))}
     </nav>
   </div>
 </div>

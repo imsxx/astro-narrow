@@ -15,8 +15,7 @@ type Props = {
 const { posts, base, current, totalPages } = Astro.props
 ---
 
-{
-  posts.length > 0 ? (
+{posts.length > 0 ? (
     <>
       <CardGrid columns={1}>
         {posts.map((post) => (
@@ -33,5 +32,4 @@ const { posts, base, current, totalPages } = Astro.props
     </>
   ) : (
     <p class="text-muted-foreground py-8 text-sm">{t.article.empty}</p>
-  )
-}
+  )}

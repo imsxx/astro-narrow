@@ -17,9 +17,10 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props
 ---
 
-<Base title={`#${tag} | ${siteConfig.title}`}
+<Base
+  title={`#${tag} | ${siteConfig.title}`}
   crumbs={[{ label: "标签", href: "/tags" }, { label: `#${tag}` }]}
 >
-      <PageHeader title={`#${tag}`} meta={t.list.pages(posts.length)} />
-      <PostFeed posts={posts} base={`/tags/${tag}`} current={1} totalPages={1} />
+  <PageHeader title={`#${tag}`} meta={t.list.pages(posts.length)} />
+  <PostFeed posts={posts} base={`/tags/${tag}`} current={1} totalPages={1} />
 </Base>

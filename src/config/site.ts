@@ -157,7 +157,9 @@ const siteSchema = z.object({
   gallery: z
     .object({
       enabled: z.boolean().default(true),
-      defaultLayout: z.enum(["justified", "masonry", "grid"]).default("justified"),
+      defaultLayout: z
+        .enum(["justified", "masonry", "grid"])
+        .default("justified"),
     })
     .prefault({}),
   lightbox: z.object({ enabled: z.boolean().default(true) }).prefault({}),
@@ -248,7 +250,11 @@ export const siteConfig = siteSchema.parse({
       lang: "zh-CN",
     },
     disqus: {},
-    utterances: { issueTerm: "pathname", label: "comment", theme: "preferred-color-scheme" },
+    utterances: {
+      issueTerm: "pathname",
+      label: "comment",
+      theme: "preferred-color-scheme",
+    },
     waline: {},
     artalk: {},
     twikoo: {},
@@ -266,7 +272,12 @@ export const siteConfig = siteSchema.parse({
   gallery: { enabled: true, defaultLayout: "justified" },
   lightbox: { enabled: true },
   codeblock: {
-    collapse: { enabled: true, defaultState: "expanded", maxLines: 30, collapsedHeight: 120 },
+    collapse: {
+      enabled: true,
+      defaultState: "expanded",
+      maxLines: 30,
+      collapsedHeight: 120,
+    },
   },
   readingProgress: { enabled: true, showOnHomepage: false },
   pagination: { pageSize: 10 },

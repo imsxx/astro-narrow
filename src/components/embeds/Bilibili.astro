@@ -20,8 +20,7 @@ if (isAv) query.set("aid", lower.slice(2))
 else if (isBv) query.set("bvid", vid)
 ---
 
-{
-  isAv || isBv ? (
+{isAv || isBv ? (
     <div class="bg-card border-border my-8 overflow-hidden rounded-md border">
       <div class="aspect-video">
         <iframe
@@ -43,5 +42,4 @@ else if (isBv) query.set("bvid", vid)
         当前视频编号：{vid}，分 P：{page}
       </p>
     </div>
-  )
-}
+  )}

@@ -29,9 +29,11 @@ function languageOf(pre: HastNode): string {
 }
 
 function icon(name: string, className: string) {
-  return h("svg", { class: className, viewBox: "0 0 24 24", "aria-hidden": "true" }, [
-    h("use", { href: `/icons/sprite.svg#icon-${name}` }),
-  ])
+  return h(
+    "svg",
+    { class: className, viewBox: "0 0 24 24", "aria-hidden": "true" },
+    [h("use", { href: `/icons/sprite.svg#icon-${name}` })],
+  )
 }
 
 function buildShell(pre: HastNode, index: number) {
@@ -47,7 +49,10 @@ function buildShell(pre: HastNode, index: number) {
   const collapsedHeight = collapse.collapsedHeight
 
   // Reuse the upstream stylesheet, which targets Chroma's wrapper class.
-  pre.properties = { ...pre.properties, class: ["chroma", pre.properties?.class ?? ""] }
+  pre.properties = {
+    ...pre.properties,
+    class: ["chroma", pre.properties?.class ?? ""],
+  }
 
   return h(
     "div",
@@ -71,8 +76,14 @@ function buildShell(pre: HastNode, index: number) {
         },
         [
           h("div", { class: "flex items-center gap-2" }, [
-            h("div", { class: "text-muted-foreground shrink-0" }, [icon("code", "h-4 w-4")]),
-            h("span", { class: "text-muted-foreground text-xs font-medium" }, display),
+            h("div", { class: "text-muted-foreground shrink-0" }, [
+              icon("code", "h-4 w-4"),
+            ]),
+            h(
+              "span",
+              { class: "text-muted-foreground text-xs font-medium" },
+              display,
+            ),
           ]),
           h("div", { class: "flex items-center gap-2" }, [
             collapseEnabled &&
@@ -91,10 +102,19 @@ function buildShell(pre: HastNode, index: number) {
                   "aria-expanded": "true",
                 },
                 [
-                  h("span", { class: "collapse-chevron transition-transform duration-200 ease-out" }, [
-                    icon("chevron-down", "h-3 w-3"),
-                  ]),
-                  h("span", { class: "collapse-text hidden sm:inline" }, t.code.collapse),
+                  h(
+                    "span",
+                    {
+                      class:
+                        "collapse-chevron transition-transform duration-200 ease-out",
+                    },
+                    [icon("chevron-down", "h-3 w-3")],
+                  ),
+                  h(
+                    "span",
+                    { class: "collapse-text hidden sm:inline" },
+                    t.code.collapse,
+                  ),
                 ],
               ),
             h(

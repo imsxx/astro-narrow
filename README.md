@@ -81,9 +81,48 @@ literal source instead of being half-processed.
 ```bash
 pnpm install
 pnpm dev
-pnpm build
-pnpm preview
 ```
+
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | local dev server |
+| `pnpm build` | static build into `dist/` |
+| `pnpm preview` | serve the build locally |
+| `pnpm check` | type-check `.astro` and `.ts` |
+| `pnpm format` | format with Biome |
+| `pnpm i18n` | regenerate locale dictionaries from the upstream snapshot |
+| `pnpm upstream:pull <tag>` | refresh `upstream/hugo-narrow` to a given tag |
+
+Biome formats scripts, config and data files. `.astro` files are excluded from the formatter: the
+experimental HTML parser cannot read Astro's `define:vars` directive. Type safety for templates comes
+from `pnpm check` instead.
+
+## Deploy
+
+The output is fully static: build with `pnpm build`, publish `dist/`. Any static host works
+(Cloudflare Pages, Vercel, Netlify, S3, nginx).
+
+Before the first deploy, change `site` in `astro.config.ts` to your own domain — it drives canonical
+URLs, the sitemap and `robots.txt`.
+
+```ts
+// astro.config.ts
+export default defineConfig({
+  site: "https://example.com",
+  // ...
+})
+```
+
+Node version: CI reads `.node-version`. Keep it at 24; Node 25 currently crashes during Astro's
+build on Windows.
+
+## Example content
+
+`src/content/posts` ships with demo posts that exercise each feature: typography, MDX embeds, math,
+diagrams, gallery, and per-page toggles. Replace them with your own content. Keeping one or two
+around as reference is useful until the front matter options are familiar.
+
+`src/content/pages` holds about / resume / timeline, `src/content/projects` holds the project list.
 
 ## Structure
 

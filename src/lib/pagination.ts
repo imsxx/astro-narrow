@@ -32,7 +32,10 @@ export function paginate<T>(
 }
 
 /** Page numbers to render, with null standing for an ellipsis. */
-export function pageWindow(current: number, totalPages: number): (number | null)[] {
+export function pageWindow(
+  current: number,
+  totalPages: number,
+): (number | null)[] {
   if (totalPages <= 1) return []
   const pages = new Set<number>()
   for (let i = current - 2; i <= current + 2; i += 1) {

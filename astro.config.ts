@@ -20,7 +20,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkMermaid, ...(katexEnabled ? [remarkMath] : [])] as never[],
+    remarkPlugins: [
+      remarkMermaid,
+      ...(katexEnabled ? [remarkMath] : []),
+    ] as never[],
     rehypePlugins: [
       ...(katexEnabled
         ? ([

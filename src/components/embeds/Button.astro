@@ -34,16 +34,19 @@ const presets: Record<string, string> = {
 }
 
 const variantClass = isCustom ? "" : (presets[variant] ?? presets.primary)
-const sizeClass = { sm: "h-8 px-3", md: "h-9 px-4", lg: "h-10 px-6 text-base" }[size]
-const style = isCustom ? `background-color: ${variant}; color: white;` : undefined
+const sizeClass = { sm: "h-8 px-3", md: "h-9 px-4", lg: "h-10 px-6 text-base" }[
+  size
+]
+const style = isCustom
+  ? `background-color: ${variant}; color: white;`
+  : undefined
 const finalRel = target === "_blank" && !rel ? "noopener noreferrer" : rel
 
 const classes = [base, variantClass, sizeClass].filter(Boolean)
 ---
 
 <span class="not-prose my-2 mr-2 inline-block">
-  {
-    url ? (
+  {url ? (
       <a
         href={url}
         class:list={classes}
@@ -59,6 +62,5 @@ const classes = [base, variantClass, sizeClass].filter(Boolean)
         {icon && <Icon name={icon} size="sm" class="shrink-0" />}
         <span>{text}<slot /></span>
       </button>
-    )
-  }
+    )}
 </span>

@@ -4,7 +4,13 @@ import Icon from "@/components/Icon.astro"
 import RelatedPosts from "@/components/content/RelatedPosts.astro"
 import Comments from "@/components/features/Comments.astro"
 import { siteConfig } from "@/config/site"
-import { getPosts, readingTime, seriesInfo, summaryOf, wordCount } from "@/lib/posts"
+import {
+  getPosts,
+  readingTime,
+  seriesInfo,
+  summaryOf,
+  wordCount,
+} from "@/lib/posts"
 import { resolveLicense, resolveToggle } from "@/lib/toggles"
 import { formatDate, isoDate } from "@/lib/date"
 import { render } from "astro:content"
@@ -23,13 +29,19 @@ const { Content, headings } = await render(post)
 const series = await seriesInfo(post)
 
 const pageToc = resolveToggle(post.data.toc, siteConfig.toc.enabled)
-const pageComments = resolveToggle(post.data.comments, siteConfig.comments.enabled)
+const pageComments = resolveToggle(
+  post.data.comments,
+  siteConfig.comments.enabled,
+)
 const pageSystem =
   typeof post.data.comments === "object"
     ? (post.data.comments.system ?? siteConfig.comments.system)
     : siteConfig.comments.system
 const pageMermaid = resolveToggle(post.data.mermaid, siteConfig.mermaid.enabled)
-const pageLightbox = resolveToggle(post.data.lightbox, siteConfig.lightbox.enabled)
+const pageLightbox = resolveToggle(
+  post.data.lightbox,
+  siteConfig.lightbox.enabled,
+)
 const license = resolveLicense(post.data.license, siteConfig.post.license)
 
 const hasMermaid = pageMermaid && /```mermaid\b/.test(post.body ?? "")
@@ -49,40 +61,39 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
   commentsEnabled={pageComments}
   lightboxEnabled={pageLightbox}
 >
-      <header class="mb-8">
-        <div class="post-meta mb-8">
-          <h1 class="text-foreground text-2xl leading-tight font-semibold tracking-tight md:text-3xl">
-            {post.data.title}
-          </h1>
+  <header class="mb-8">
+    <div class="post-meta mb-8">
+      <h1
+        class="text-foreground text-2xl leading-tight font-semibold tracking-tight md:text-3xl"
+      >
+        {post.data.title}
+      </h1>
 
-          {
-            summaryOf(post) && (
+      {summaryOf(post) && (
               <p class="text-muted-foreground mt-3 text-base leading-relaxed">
                 {summaryOf(post)}
               </p>
-            )
-          }
+            )}
 
-          <div class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-            <time datetime={isoDate(post.data.date)}>
-              {formatDate(post.data.date)}
-            </time>
-            <span>{t.article.readingTime(readingTime(post.body ?? ""))}</span>
-            <span>{t.article.wordCount(wordCount(post.body ?? ""))}</span>
-            {
-              license && (
+      <div
+        class="text-muted-foreground mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs"
+      >
+        <time datetime={isoDate(post.data.date)}>
+          {formatDate(post.data.date)}
+        </time>
+        <span>{t.article.readingTime(readingTime(post.body ?? ""))}</span>
+        <span>{t.article.wordCount(wordCount(post.body ?? ""))}</span>
+        {license && (
                 <span class="inline-flex items-center gap-1">
                   <span class="text-primary shrink-0">
                     <Icon name="license" size="xs" />
                   </span>
                   <span>{license}</span>
                 </span>
-              )
-            }
-          </div>
+              )}
+      </div>
 
-          {
-            post.data.tags.length > 0 && (
+      {post.data.tags.length > 0 && (
               <div class="mt-4 flex flex-wrap items-center gap-1.5">
                 {post.data.tags.map((tag) => (
                   <a
@@ -93,18 +104,18 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
                   </a>
                 ))}
               </div>
-            )
-          }
-        </div>
-      </header>
+            )}
+    </div>
+  </header>
 
-      <article class="prose max-w-none">
-        <Content />
-      </article>
+  <article class="prose max-w-none">
+    <Content />
+  </article>
 
-      <nav class="border-border mt-10 flex items-start justify-between gap-4 border-t pt-6 text-sm">
-        {
-          prev ? (
+  <nav
+    class="border-border mt-10 flex items-start justify-between gap-4 border-t pt-6 text-sm"
+  >
+    {prev ? (
             <a href={`/posts/${prev.id}`} class="group max-w-[45%]">
               <span class="text-muted-foreground block text-xs">{t.article.prev}</span>
               <span class="text-foreground group-hover:text-primary mt-1 block transition-colors">
@@ -113,10 +124,8 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
             </a>
           ) : (
             <span />
-          )
-        }
-        {
-          next ? (
+          )}
+    {next ? (
             <a href={`/posts/${next.id}`} class="group ml-auto max-w-[45%] text-right">
               <span class="text-muted-foreground block text-xs">{t.article.next}</span>
               <span class="text-foreground group-hover:text-primary mt-1 block transition-colors">
@@ -125,10 +134,9 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
             </a>
           ) : (
             <span />
-          )
-        }
-      </nav>
+          )}
+  </nav>
 
-      <RelatedPosts post={post} />
-      <Comments enabled={pageComments} system={pageSystem} />
+  <RelatedPosts post={post} />
+  <Comments enabled={pageComments} system={pageSystem} />
 </Base>

@@ -55,8 +55,7 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
       <Icon name="search" size="sm" />
     </button>
 
-    {
-      showToc && (
+    {showToc && (
         <>
           <span class="dock-divider" aria-hidden="true" />
           <button
@@ -71,11 +70,9 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
             <Icon name="list" size="sm" />
           </button>
         </>
-      )
-    }
+      )}
 
-    {
-      showComments && (
+    {showComments && (
         <>
           <span class="dock-divider" aria-hidden="true" />
           <button
@@ -88,8 +85,7 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
             <Icon name="message-circle" size="sm" />
           </button>
         </>
-      )
-    }
+      )}
 
     <span class="dock-divider" aria-hidden="true" />
 
@@ -108,10 +104,8 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
   </div>
 </nav>
 
-{
-  siteConfig.announcement.enabled && (
+{siteConfig.announcement.enabled && (
     <p hidden data-announcement-fallback>
       {siteConfig.announcement.message}
     </p>
-  )
-}
+  )}

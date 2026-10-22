@@ -91,7 +91,8 @@ export const en: Dict = {
   },
   notFound: {
     title: "Page Not Found",
-    message: "Sorry, the page you are looking for does not exist or has been removed.",
+    message:
+      "Sorry, the page you are looking for does not exist or has been removed.",
   },
   footer: {
     poweredBy: "Powered by",

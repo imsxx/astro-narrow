@@ -27,8 +27,7 @@ import { t } from "@/i18n"
       {t.ui.colorScheme}
     </legend>
     <div class="grid grid-cols-2 gap-0.5">
-      {
-        colorSchemes.map((scheme) => (
+      {colorSchemes.map((scheme) => (
           <label class="block min-w-0">
             <input
               type="radio"
@@ -40,8 +39,7 @@ import { t } from "@/i18n"
               {scheme.name}
             </span>
           </label>
-        ))
-      }
+        ))}
     </div>
   </fieldset>
 
@@ -50,8 +48,7 @@ import { t } from "@/i18n"
       {t.ui.themeMode}
     </legend>
     <div class="bg-muted grid grid-cols-3 gap-0.5 rounded-md p-0.5">
-      {
-        [
+      {[
           { value: "light", label: t.ui.themeLight },
           { value: "dark", label: t.ui.themeDark },
           { value: "system", label: t.ui.themeSystem },
@@ -67,8 +64,7 @@ import { t } from "@/i18n"
               {mode.label}
             </span>
           </label>
-        ))
-      }
+        ))}
     </div>
   </fieldset>
 
@@ -81,7 +77,8 @@ import { t } from "@/i18n"
         <output
           id="content-width-value"
           for="content-width-range"
-          class="text-muted-foreground font-mono text-xs tabular-nums"></output>
+          class="text-muted-foreground font-mono text-xs tabular-nums"
+        ></output>
         <button
           id="content-width-reset"
           type="button"
@@ -99,7 +96,7 @@ import { t } from "@/i18n"
       max="90"
       step="1"
       aria-label={t.ui.contentWidth}
-    />
+    >
   </fieldset>
 
   <fieldset class="border-border space-y-2 border-t pt-3">
@@ -111,7 +108,8 @@ import { t } from "@/i18n"
         <output
           id="backdrop-blur-value"
           for="backdrop-blur-range"
-          class="text-muted-foreground font-mono text-xs tabular-nums"></output>
+          class="text-muted-foreground font-mono text-xs tabular-nums"
+        ></output>
         <button
           id="backdrop-blur-reset"
           type="button"
@@ -129,7 +127,7 @@ import { t } from "@/i18n"
       max="24"
       step="1"
       aria-label={t.ui.backdropBlur}
-    />
+    >
   </fieldset>
 
   <fieldset class="border-border space-y-2 border-t pt-3">
@@ -141,7 +139,8 @@ import { t } from "@/i18n"
         <output
           id="grain-size-value"
           for="grain-size-range"
-          class="text-muted-foreground font-mono text-xs tabular-nums"></output>
+          class="text-muted-foreground font-mono text-xs tabular-nums"
+        ></output>
         <button
           id="grain-size-reset"
           type="button"
@@ -159,6 +158,6 @@ import { t } from "@/i18n"
       max="100"
       step="5"
       aria-label={t.ui.grainSize}
-    />
+    >
   </fieldset>
 </div>

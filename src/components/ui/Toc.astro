@@ -20,7 +20,11 @@ function buildToc(items: MarkdownHeading[]): TocNode[] {
       current = { id: heading.slug, text: heading.text, children: [] }
       roots.push(current)
     } else if (heading.depth === 3 && current) {
-      current.children.push({ id: heading.slug, text: heading.text, children: [] })
+      current.children.push({
+        id: heading.slug,
+        text: heading.text,
+        children: [],
+      })
     }
   }
   return roots
@@ -43,11 +47,11 @@ function renderList(nodes: TocNode[]): string {
 }
 
 const tree = buildToc(headings)
-const tocHtml = tree.length > 0 ? `<nav id="TableOfContents">${renderList(tree)}</nav>` : ""
+const tocHtml =
+  tree.length > 0 ? `<nav id="TableOfContents">${renderList(tree)}</nav>` : ""
 ---
 
-{
-  enabled && tocHtml && (
+{enabled && tocHtml && (
     <aside
       id="toc-panel"
       class="toc-panel"
@@ -92,5 +96,4 @@ const tocHtml = tree.length > 0 ? `<nav id="TableOfContents">${renderList(tree)}
         <Fragment set:html={tocHtml} />
       </div>
     </aside>
-  )
-}
+  )}
