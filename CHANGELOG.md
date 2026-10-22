@@ -24,6 +24,8 @@ First port of [hugo-narrow](https://github.com/tom2almighty/hugo-narrow) v2.0.0 
 - Math: KaTeX rendered at build time
 - Diagrams: Mermaid loaded on demand and re-rendered on theme change
 - Images: adjacent images grouped into a gallery with layout switcher and lightbox
+- Alerts: GitHub-style `[!NOTE]` blockquotes, including collapsible `+` / `-` variants
+- Cover images rendered above the post header, and an optional updated date in the meta line
 - MDX components replacing the upstream shortcodes (button, link card, tabs, Bilibili, Tencent Video)
 
 **Integration**

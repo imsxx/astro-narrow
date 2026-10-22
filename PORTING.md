@@ -60,6 +60,7 @@ column.
 | `layouts/_partials/content/post-meta.html` | inline in `posts/[...slug].astro` | rewritten |
 | `layouts/_partials/content/image-processor.html` | — | replaced (`astro:assets`) |
 | `layouts/_markup/render-codeblock.html` | `src/lib/rehype/code-block.ts` | rewritten |
+| `layouts/_markup/render-blockquote.html` | `src/lib/rehype/alert.ts` | rewritten |
 | `layouts/_markup/render-image.html` | `src/lib/rehype/image-attrs.ts` | rewritten |
 | `layouts/_markup/render-heading.html` | — | replaced (Astro heading slugs) |
 | `layouts/_partials/layout/head.html` | head block in `Base.astro` | rewritten |

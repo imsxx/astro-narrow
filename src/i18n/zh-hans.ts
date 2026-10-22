@@ -20,6 +20,7 @@ export const zhHans = {
       caution: "小心",
       warning: "警告",
     },
+    updated: "更新于",
     readingTime: (n: number) => `${n} 分钟`,
     wordCount: (n: number) => `${n} 字`,
   },

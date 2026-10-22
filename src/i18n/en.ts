@@ -17,6 +17,7 @@ export const en: Dict = {
       caution: "Caution",
       warning: "Warning",
     },
+    updated: "Updated",
     readingTime: (n) => `${n} min`,
     wordCount: (n) => (n === 1 ? "1 word" : `${n} words`),
   },

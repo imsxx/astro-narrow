@@ -61,6 +61,19 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
   commentsEnabled={pageComments}
   lightboxEnabled={pageLightbox}
 >
+  {post.data.cover && (
+    <div class="border-border mb-8 overflow-hidden rounded-lg border">
+      <img
+        src={post.data.cover}
+        alt={post.data.title}
+        class="aspect-video max-h-96 w-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  )}
+
   <header class="mb-8">
     <div class="post-meta mb-8">
       <h1
@@ -83,6 +96,11 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
         </time>
         <span>{t.article.readingTime(readingTime(post.body ?? ""))}</span>
         <span>{t.article.wordCount(wordCount(post.body ?? ""))}</span>
+        {post.data.updated && (
+          <span>
+            {t.article.updated} {formatDate(post.data.updated)}
+          </span>
+        )}
         {license && (
                 <span class="inline-flex items-center gap-1">
                   <span class="text-primary shrink-0">
