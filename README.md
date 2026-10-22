@@ -118,9 +118,10 @@ build on Windows.
 
 ## Example content
 
-`src/content/posts` ships with demo posts that exercise each feature: typography, MDX embeds, math,
-diagrams, gallery, and per-page toggles. Replace them with your own content. Keeping one or two
-around as reference is useful until the front matter options are familiar.
+`src/content/posts` ships with four sample posts. Three of them form the "主题使用指南" series and
+cover Markdown syntax, MDX embeds, and per-page toggles; the fourth is the same tour in English.
+Delete them once your own posts are in place — the front matter in each one doubles as a reference
+for what the theme supports.
 
 `src/content/pages` holds about / resume / timeline, `src/content/projects` holds the project list.
 

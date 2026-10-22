@@ -225,7 +225,7 @@ export const siteConfig = siteSchema.parse({
   toc: { enabled: true },
   colorScheme: "default",
   home: {
-    recentPostsCount: 3,
+    recentPostsCount: 4,
     contentOrder: ["author-section", "recent-posts", "featured-projects"],
   },
   post: {
