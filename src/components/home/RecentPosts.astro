@@ -1,7 +1,9 @@
 ---
+import Card from "@/components/content/Card.astro"
+import CardGrid from "@/components/content/CardGrid.astro"
+import SectionHeader from "@/components/content/SectionHeader.astro"
 import { siteConfig } from "@/config/site"
-import { getPosts, readingTime, summaryOf } from "@/lib/posts"
-import { formatDate, isoDate } from "@/lib/date"
+import { getPosts, summaryOf } from "@/lib/posts"
 import { t } from "@/i18n"
 import { url } from "@/lib/url"
 
@@ -9,49 +11,18 @@ const posts = await getPosts()
 const recent = posts.slice(0, siteConfig.home.recentPostsCount)
 ---
 
-<section>
-  <div class="mb-4 flex items-end justify-between gap-4">
-    <h2 class="text-foreground text-lg font-semibold tracking-tight">
-      {t.home.recentPosts}
-    </h2>
-    <a
-      href={url("/posts")}
-      class="text-muted-foreground hover:text-foreground text-sm transition-colors"
-    >
-      {t.home.viewAll}
-    </a>
-  </div>
-
-  <ul class="space-y-4">
+<section class="post-list">
+  <SectionHeader title={t.home.recentPosts} viewAllHref={url("/posts")} />
+  <CardGrid columns={1}>
     {recent.map((post) => (
-      <li class="border-border bg-card hover:border-foreground/20 rounded-lg border p-4 transition-colors md:p-5">
-        <a href={url(`/posts/${post.id}`)} class="group block">
-          <h3 class="text-foreground group-hover:text-primary text-base font-medium transition-colors">
-            {post.data.title}
-          </h3>
-          <p class="text-muted-foreground mt-1.5 line-clamp-2 text-sm leading-relaxed">
-            {summaryOf(post)}
-          </p>
-        </a>
-        <div class="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-          <time datetime={isoDate(post.data.date)}>
-            {formatDate(post.data.date)}
-          </time>
-          <span>{t.article.readingTime(readingTime(post.body ?? ""))}</span>
-          {post.data.tags.length > 0 && (
-            <div class="flex flex-wrap items-center gap-1.5">
-              {post.data.tags.map((tag) => (
-                <a
-                  href={url(`/tags/${tag}`)}
-                  class="border-border hover:bg-accent hover:text-accent-foreground inline-flex h-5 items-center rounded-md border px-1.5 text-xs transition-colors"
-                >
-                  {tag}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      </li>
+      <Card
+        variant="post"
+        title={post.data.title}
+        href={url(`/posts/${post.id}/`)}
+        summary={summaryOf(post)}
+        date={post.data.date}
+        tags={post.data.tags}
+      />
     ))}
-  </ul>
+  </CardGrid>
 </section>

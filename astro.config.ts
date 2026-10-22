@@ -8,6 +8,7 @@ import { siteConfig } from "./src/config/site"
 import { remarkMermaid } from "./src/lib/remark/mermaid"
 import { rehypeAlert } from "./src/lib/rehype/alert"
 import { rehypeBaseLinks } from "./src/lib/rehype/base-links"
+import { rehypeHeadingAnchors } from "./src/lib/rehype/heading-anchor"
 import { rehypeCodeBlockShell } from "./src/lib/rehype/code-block"
 import { rehypeKatexGuard } from "./src/lib/rehype/katex-guard"
 import { rehypeImageFigure } from "./src/lib/rehype/image-figure"
@@ -37,6 +38,7 @@ export default defineConfig({
         : []),
       rehypeAlert,
       rehypeBaseLinks,
+      rehypeHeadingAnchors,
       rehypeCodeBlockShell,
       rehypeImageFigure,
       rehypeImageAttrs,

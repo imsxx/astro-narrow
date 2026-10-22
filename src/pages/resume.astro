@@ -7,13 +7,14 @@ import { getEntry, render } from "astro:content"
 const page = await getEntry("pages", "resume")
 if (!page) throw new Error("Missing src/content/pages/resume.md")
 
-const { Content } = await render(page)
+const { Content, headings } = await render(page)
 ---
 
 <Base
   title={`${page.data.title} | ${siteConfig.title}`}
   description={page.data.summary}
   crumbs={[{ label: page.data.title }]}
+  headings={headings}
 >
   <PageHeader title={page.data.title} description={page.data.summary} />
 

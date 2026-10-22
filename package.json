@@ -1,6 +1,6 @@
 {
   "name": "astro-narrow",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "private": false,
   "license": "AGPL-3.0-only",
@@ -25,6 +25,7 @@
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^7.4.2",
+    "github-slugger": "^2.0.0",
     "katex": "^0.19.0",
     "mermaid": "^12.2.0",
     "rehype-katex": "^7.0.1",

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0
+
+Restores three upstream layout pieces the port had missed:
+
+- Heading anchors: content headings now render the hover link icon from `render-heading.html`.
+  Astro assigns heading ids after user rehype plugins run, so the plugin generates ids with the same
+  slugger Astro uses and keeps TOC links in sync.
+- Table of contents on project, resume and timeline pages. They render Markdown headings but never
+  passed `headings` to the layout, so the panel and the dock button were missing.
+- The home page lists recent posts as the upstream card grid instead of a plain list, and project
+  detail headers match upstream (bottom border plus an "open project" button).
+
 ## 1.1.0
 
 - The home page now honours `home.contentOrder` instead of rendering two hard-coded sections, and
