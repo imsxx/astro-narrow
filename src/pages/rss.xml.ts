@@ -1,3 +1,4 @@
+import { url } from "@/lib/url"
 import rss from "@astrojs/rss"
 import type { APIContext } from "astro"
 import { siteConfig } from "@/config/site"
@@ -13,7 +14,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       description: summaryOf(post),
       pubDate: post.data.date,
-      link: `/posts/${post.id}/`,
+      link: url(`/posts/${post.id}/`),
     })),
     customData: `<language>${siteConfig.lang}</language>`,
   })

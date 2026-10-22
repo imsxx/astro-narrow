@@ -1,3 +1,4 @@
+import { url } from "../url"
 import { h as hastscript } from "hastscript"
 import { t } from "../../i18n"
 import { siteConfig } from "../../config/site"
@@ -32,7 +33,7 @@ function icon(name: string, className: string) {
   return h(
     "svg",
     { class: className, viewBox: "0 0 24 24", "aria-hidden": "true" },
-    [h("use", { href: `/icons/sprite.svg#icon-${name}` })],
+    [h("use", { href: `${url("/icons/sprite.svg")}#icon-${name}` })],
   )
 }
 

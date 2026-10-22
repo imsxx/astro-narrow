@@ -28,6 +28,7 @@ const sizeClasses = {
 const cls = [size ? sizeClasses[size] : "", className].filter(Boolean).join(" ")
 const known = Object.keys(icons).some((path) => path.endsWith(`/${name}.svg`))
 const decorative = hidden || !ariaLabel
+import { url } from "@/lib/url"
 ---
 
 {known ? (
@@ -39,7 +40,7 @@ const decorative = hidden || !ariaLabel
       aria-label={decorative ? undefined : ariaLabel}
       aria-hidden={decorative ? "true" : undefined}
     >
-      <use href={`/icons/sprite.svg#icon-${name}`} />
+      <use href={`${url("/icons/sprite.svg")}#icon-${name}`} />
     </svg>
   ) : (
     <svg

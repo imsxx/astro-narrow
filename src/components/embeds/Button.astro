@@ -43,12 +43,13 @@ const style = isCustom
 const finalRel = target === "_blank" && !rel ? "noopener noreferrer" : rel
 
 const classes = [base, variantClass, sizeClass].filter(Boolean)
+import { url as withBase } from "@/lib/url"
 ---
 
 <span class="not-prose my-2 mr-2 inline-block">
   {url ? (
       <a
-        href={url}
+        href={withBase(url)}
         class:list={classes}
         style={style}
         target={target === "_blank" ? "_blank" : undefined}

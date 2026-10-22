@@ -1,3 +1,4 @@
+import { url } from "./url"
 import { getCollection, type CollectionEntry } from "astro:content"
 
 export type Post = CollectionEntry<"posts">
@@ -72,7 +73,7 @@ export async function seriesInfo(post: Post) {
   if (index < 0 || parts.length < 2) return null
   return {
     name,
-    href: `/series/${name}/`,
+    href: url(`/series/${name}/`),
     parts,
     current: index + 1,
     total: parts.length,

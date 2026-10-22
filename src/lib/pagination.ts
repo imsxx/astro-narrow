@@ -1,6 +1,8 @@
+import { url } from "./url"
 export function pageUrl(base: string, page: number): string {
   const clean = base.replace(/\/+$/, "")
-  return page <= 1 ? `${clean}/` : `${clean}/page/${page}/`
+  const path = page <= 1 ? `${clean}/` : `${clean}/page/${page}/`
+  return url(path)
 }
 
 export type Paginated<T> = {

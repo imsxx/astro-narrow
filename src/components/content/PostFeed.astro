@@ -13,6 +13,7 @@ type Props = {
 }
 
 const { posts, base, current, totalPages } = Astro.props
+import { url } from "@/lib/url"
 ---
 
 {posts.length > 0 ? (
@@ -21,7 +22,7 @@ const { posts, base, current, totalPages } = Astro.props
         {posts.map((post) => (
           <Card
             title={post.data.title}
-            href={`/posts/${post.id}/`}
+            href={url(`/posts/${post.id}/`)}
             summary={summaryOf(post)}
             date={post.data.date}
             tags={post.data.tags}

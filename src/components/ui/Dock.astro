@@ -11,6 +11,7 @@ type Props = {
 }
 
 const { showToc = false, showComments = false, isHome = false } = Astro.props
+import { url } from "@/lib/url"
 ---
 
 <nav
@@ -23,7 +24,7 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
   <div class="dock-shell">
     <a
       id="dock-home"
-      href="/"
+      href={url("/")}
       class="dock-item"
       title={t.nav.backHome}
       aria-label={t.nav.backHome}
@@ -42,7 +43,12 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
       aria-expanded="false"
       popovertarget="nav-menu-popover"
     >
-      <Icon name="menu" size="sm" />
+      <span class="dock-menu-icon-expanded">
+        <Icon name="categories" size="sm" />
+      </span>
+      <span class="dock-menu-icon-collapsed">
+        <Icon name="menu" size="sm" />
+      </span>
     </button>
 
     <button
@@ -67,7 +73,7 @@ const { showToc = false, showComments = false, isHome = false } = Astro.props
             aria-controls="toc-panel"
             aria-expanded="false"
           >
-            <Icon name="list" size="sm" />
+            <Icon name="book-open" size="sm" />
           </button>
         </>
       )}

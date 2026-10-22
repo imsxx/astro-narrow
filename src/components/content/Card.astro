@@ -27,6 +27,7 @@ const {
 } = Astro.props
 
 const hasMeta = Boolean(date) || Boolean(tags?.length) || Boolean(count)
+import { url } from "@/lib/url"
 ---
 
 <article class="group relative h-full" data-card={variant}>
@@ -43,7 +44,7 @@ const hasMeta = Boolean(date) || Boolean(tags?.length) || Boolean(count)
           compact ? "text-sm" : "text-base",
         ]}
       >
-        <a href={href} class="after:absolute after:inset-0">{title}</a>
+        <a href={url(href)} class="after:absolute after:inset-0">{title}</a>
       </h3>
 
       {external ? (

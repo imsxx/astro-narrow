@@ -9,11 +9,12 @@ type Props = {
 }
 
 const { title, url, description, icon } = Astro.props
+import { url as withBase } from "@/lib/url"
 ---
 
 <div class="not-prose my-4 max-w-lg">
   <a
-    href={url}
+    href={withBase(url)}
     target="_blank"
     rel="noopener noreferrer"
     class="border-border bg-card hover:bg-accent/40 hover:border-primary/30 group flex items-start gap-3 rounded-lg border p-4 transition-colors"

@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.1.0
+## 1.0.0
 
-First port of [hugo-narrow](https://github.com/tom2almighty/hugo-narrow) v2.0.0 to Astro.
+First public release. Port of [hugo-narrow](https://github.com/tom2almighty/hugo-narrow) v2.0.1 to
+Astro.
+
+Synced with upstream 2.0.1:
+
+- Subpath deployments work: `base` now flows through internal links, cover images, the icon sprite,
+  the search index, the web manifest and the feed
+- Collapsed dock capsule shrinks to a single item, with distinct icons for the expanded menu,
+  collapsed menu and table of contents
 
 **Layout and reading**
 

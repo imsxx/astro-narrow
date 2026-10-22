@@ -80,6 +80,7 @@ const siteSchema = z.object({
       indexContentLength: z.number().int().positive().default(2000),
     })
     .prefault({}),
+  base: z.string().default("/"),
   contentWidth: z.string().default("56rem"),
   backdropBlur: z.number().min(0).max(24).default(12),
   grainSize: z.number().min(0).max(100).default(25),
@@ -219,6 +220,7 @@ export const siteConfig = siteSchema.parse({
     social: [],
   },
   search: { indexContentLength: 2000 },
+  base: "/",
   contentWidth: "56rem",
   backdropBlur: 12,
   grainSize: 25,

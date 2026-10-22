@@ -14,6 +14,7 @@ const { post } = Astro.props
 const related = siteConfig.post.showRelated
   ? await getRelated(post, siteConfig.post.relatedPostsCount)
   : []
+import { url } from "@/lib/url"
 ---
 
 {related.length > 0 && (
@@ -23,7 +24,7 @@ const related = siteConfig.post.showRelated
         {related.map((entry) => (
           <Card
             title={entry.data.title}
-            href={`/posts/${entry.id}/`}
+            href={url(`/posts/${entry.id}/`)}
             summary={summaryOf(entry, 100)}
             date={entry.data.date}
             tags={entry.data.tags}

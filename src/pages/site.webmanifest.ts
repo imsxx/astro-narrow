@@ -1,3 +1,4 @@
+import { url } from "@/lib/url"
 import type { APIRoute } from "astro"
 import { siteConfig } from "@/config/site"
 
@@ -7,7 +8,7 @@ export const GET: APIRoute = () => {
 
   if (siteConfig.favicon.svg) {
     icons.push({
-      src: siteConfig.favicon.svg,
+      src: url(siteConfig.favicon.svg),
       sizes: "any",
       type: "image/svg+xml",
     })
@@ -15,7 +16,7 @@ export const GET: APIRoute = () => {
 
   if (siteConfig.pwa.appleTouchIcon) {
     icons.push({
-      src: siteConfig.pwa.appleTouchIcon,
+      src: url(siteConfig.pwa.appleTouchIcon),
       sizes: "180x180",
       type: "image/png",
     })
@@ -25,8 +26,8 @@ export const GET: APIRoute = () => {
     name: siteConfig.title,
     short_name: siteConfig.shortName ?? siteConfig.title,
     description: siteConfig.description,
-    start_url: "/",
-    scope: "/",
+    start_url: url("/"),
+    scope: url("/"),
     display: "standalone",
     background_color: siteConfig.pwa.backgroundColor,
     theme_color: siteConfig.pwa.themeColor,

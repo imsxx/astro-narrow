@@ -21,12 +21,13 @@ const sizeFor = (count: number): string => {
   if (weight === 2) return "text-base"
   return "text-sm"
 }
+import { url } from "@/lib/url"
 ---
 
 <div class="flex flex-wrap gap-2.5">
   {terms.map((term) => (
       <a
-        href={term.href}
+        href={url(term.href)}
         class:list={[
           sizeFor(term.count),
           "border-border bg-card hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring/50 inline-flex items-center gap-2 rounded-md border px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:outline-none",

@@ -34,6 +34,7 @@ const monthLabel = (year: number, month: number) =>
     month: "long",
     timeZone: "Asia/Shanghai",
   }).format(new Date(year, month - 1, 1))
+import { url } from "@/lib/url"
 ---
 
 <Base title={`归档 | ${siteConfig.title}`} crumbs={[{ label: "归档" }]}>
@@ -79,7 +80,7 @@ const monthLabel = (year: number, month: number) =>
                         <Card
                           compact
                           title={post.data.title}
-                          href={`/posts/${post.id}/`}
+                          href={url(`/posts/${post.id}/`)}
                           summary={summaryOf(post)}
                           date={post.data.date}
                           tags={post.data.tags}

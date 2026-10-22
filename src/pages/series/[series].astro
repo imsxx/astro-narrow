@@ -16,6 +16,7 @@ export async function getStaticPaths() {
 }
 
 const { name, posts } = Astro.props
+import { url } from "@/lib/url"
 ---
 
 <Base
@@ -32,7 +33,7 @@ const { name, posts } = Astro.props
               <div class="min-w-0 flex-1">
                 <Card
                   title={post.data.title}
-                  href={`/posts/${post.id}/`}
+                  href={url(`/posts/${post.id}/`)}
                   summary={summaryOf(post)}
                   date={post.data.date}
                   tags={post.data.tags}
