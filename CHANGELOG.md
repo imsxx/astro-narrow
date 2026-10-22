@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1
+
+- Fix: the favicon and apple-touch-icon links ignored `base`, so they 404'd on subpath deployments.
+  Both now go through `url()`, and `favicon.svg` falls back to the default path when unset.
+
 ## 1.2.0
 
 Restores three upstream layout pieces the port had missed:

@@ -85,7 +85,11 @@ import { url } from "@/lib/url"
     <meta name="description" content={description}>
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical}>
-    <link rel="icon" href={siteConfig.favicon.svg} type="image/svg+xml">
+    <link
+      rel="icon"
+      href={url(siteConfig.favicon.svg ?? "/favicon.svg")}
+      type="image/svg+xml"
+    >
     <link rel="manifest" href={url("/site.webmanifest")}>
     <meta
       name="theme-color"
@@ -98,7 +102,7 @@ import { url } from "@/lib/url"
       media="(prefers-color-scheme: dark)"
     >
     {siteConfig.pwa.appleTouchIcon && (
-      <link rel="apple-touch-icon" href={siteConfig.pwa.appleTouchIcon} />
+      <link rel="apple-touch-icon" href={url(siteConfig.pwa.appleTouchIcon)} />
     )}
     <link
       rel="alternate"
