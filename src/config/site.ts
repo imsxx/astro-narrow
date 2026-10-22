@@ -67,7 +67,6 @@ const siteSchema = z.object({
       type: z.enum(["info", "warning", "destructive"]).default("info"),
       dismissible: z.boolean().default(true),
       autoClose: z.number().int().min(0).default(0),
-      autoClose: z.number().int().min(0).default(0),
     })
     .prefault({}),
   author: z.object({
