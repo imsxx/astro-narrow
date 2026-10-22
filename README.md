@@ -99,7 +99,7 @@ Biome 负责脚本、配置和数据文件。`.astro` 不在格式化范围内�
 
 如果手边有能读写 GitHub 仓库的 agent（Claude Code、Codex、WorkBuddy 都行），把这句话发给它：
 
-> 帮我部署 https://github.com/imsxx/astro-narrow，域名用 blog.example.com
+> 帮我部署 <https://github.com/imsxx/astro-narrow>，域名用 blog.example.com
 
 agent 需要走完四步：
 

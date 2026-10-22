@@ -108,7 +108,7 @@ The output is fully static: build with `pnpm build`, publish `dist/`. Three ways
 
 If you have an agent with repo access (Claude Code, Codex, WorkBuddy), send it this:
 
-> Deploy https://github.com/imsxx/astro-narrow for me, use blog.example.com as the domain.
+> Deploy <https://github.com/imsxx/astro-narrow> for me, use blog.example.com as the domain.
 
 Four steps the agent has to complete:
 
