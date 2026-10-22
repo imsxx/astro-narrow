@@ -1,5 +1,6 @@
 import { h } from "hastscript"
 import { siteConfig } from "../../config/site"
+import { pageFlag } from "../frontmatter-flags"
 
 type HastNode = {
   type: string
@@ -22,10 +23,10 @@ function findImage(node: HastNode): HastNode | null {
   return null
 }
 
-function buildFigure(img: HastNode) {
+function buildFigure(img: HastNode, lightboxOverride?: boolean) {
   const src = String(img.properties?.src ?? "")
   const caption = img.properties?.title ? String(img.properties.title) : ""
-  const lightbox = siteConfig.lightbox.enabled
+  const lightbox = lightboxOverride ?? siteConfig.lightbox.enabled
 
   delete img.properties?.title
 
@@ -51,8 +52,9 @@ function buildFigure(img: HastNode) {
  * gallery would nest a block element inside a paragraph.
  */
 export function rehypeImageFigure() {
-  return (tree: HastNode) => {
+  return (tree: HastNode, file: unknown) => {
     if (!siteConfig.gallery.enabled) return
+    const lightbox = pageFlag(file, "lightbox")
 
     const walk = (node: HastNode) => {
       if (!node.children) return
@@ -64,12 +66,12 @@ export function rehypeImageFigure() {
             (grand) => !(grand.type === "text" && !grand.value?.trim()),
           )
           if (img && meaningful?.length === 1) {
-            node.children[i] = buildFigure(img)
+            node.children[i] = buildFigure(img, lightbox)
             continue
           }
         }
         if (isElement(child, "img")) {
-          node.children[i] = buildFigure(child)
+          node.children[i] = buildFigure(child, lightbox)
           continue
         }
         walk(child)

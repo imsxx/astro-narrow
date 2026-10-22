@@ -5,6 +5,7 @@ import RelatedPosts from "@/components/content/RelatedPosts.astro"
 import Comments from "@/components/features/Comments.astro"
 import { siteConfig } from "@/config/site"
 import { getPosts, readingTime, seriesInfo, summaryOf, wordCount } from "@/lib/posts"
+import { resolveLicense, resolveToggle } from "@/lib/toggles"
 import { formatDate, isoDate } from "@/lib/date"
 import { render } from "astro:content"
 import { t } from "@/i18n"
@@ -21,8 +22,17 @@ const { post, prev, next } = Astro.props
 const { Content, headings } = await render(post)
 const series = await seriesInfo(post)
 
-const license = siteConfig.post.license
-const hasMermaid = /```mermaid\b/.test(post.body ?? "")
+const pageToc = resolveToggle(post.data.toc, siteConfig.toc.enabled)
+const pageComments = resolveToggle(post.data.comments, siteConfig.comments.enabled)
+const pageSystem =
+  typeof post.data.comments === "object"
+    ? (post.data.comments.system ?? siteConfig.comments.system)
+    : siteConfig.comments.system
+const pageMermaid = resolveToggle(post.data.mermaid, siteConfig.mermaid.enabled)
+const pageLightbox = resolveToggle(post.data.lightbox, siteConfig.lightbox.enabled)
+const license = resolveLicense(post.data.license, siteConfig.post.license)
+
+const hasMermaid = pageMermaid && /```mermaid\b/.test(post.body ?? "")
 const hasImages = /!\[[^\]]*\]\(/.test(post.body ?? "")
 const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
 ---
@@ -32,9 +42,12 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
   description={summaryOf(post)}
   crumbs={crumbs}
   series={series}
-  headings={post.data.toc ? headings : []}
+  headings={headings}
   hasMermaid={hasMermaid}
   hasImages={hasImages}
+  tocEnabled={pageToc}
+  commentsEnabled={pageComments}
+  lightboxEnabled={pageLightbox}
 >
       <header class="mb-8">
         <div class="post-meta mb-8">
@@ -117,5 +130,5 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
       </nav>
 
       <RelatedPosts post={post} />
-      <Comments />
+      <Comments enabled={pageComments} system={pageSystem} />
 </Base>

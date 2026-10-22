@@ -49,9 +49,25 @@ All of them live in `src/config/site.ts` and are validated by Zod.
 | `codeblock.collapse.enabled` | `true` | no collapse button |
 | `post.showRelated` | `true` | no related section |
 
+### Page-level overrides
+
+A post can override the site default in its front matter:
+
+```yaml
+toc: false
+comments: false            # or { enabled: true, system: "giscus" }
+katex: false
+mermaid: false
+lightbox: false
+license: "CC BY-ND 4.0"    # or false to hide it
+```
+
+Both `key: false` and `key: { enabled: false }` are accepted, same as upstream. `katex` and
+`mermaid` are resolved at build time, before the markdown is rendered, so a disabled block keeps its
+literal source instead of being half-processed.
+
 ## Not ported yet
 
-- Per-page front matter overrides (comments, katex, mermaid, lightbox are site-wide only)
 - Localized routes (UI copy switches via `lang`, content is single-locale)
 - Gallery layouts beyond the three the upstream script ships with
 

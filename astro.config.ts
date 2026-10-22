@@ -7,6 +7,7 @@ import rehypeKatex from "rehype-katex"
 import { siteConfig } from "./src/config/site"
 import { remarkMermaid } from "./src/lib/remark/mermaid"
 import { rehypeCodeBlockShell } from "./src/lib/rehype/code-block"
+import { rehypeKatexGuard } from "./src/lib/rehype/katex-guard"
 import { rehypeImageFigure } from "./src/lib/rehype/image-figure"
 import { rehypeImageAttrs } from "./src/lib/rehype/image-attrs"
 
@@ -22,7 +23,10 @@ export default defineConfig({
     remarkPlugins: [remarkMermaid, ...(katexEnabled ? [remarkMath] : [])] as never[],
     rehypePlugins: [
       ...(katexEnabled
-        ? ([[rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }]] as never[])
+        ? ([
+            rehypeKatexGuard,
+            [rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }],
+          ] as never[])
         : []),
       rehypeCodeBlockShell,
       rehypeImageFigure,

@@ -1,6 +1,9 @@
 import { defineCollection, z } from "astro:content"
 import { glob } from "astro/loaders"
 
+/** Upstream accepts either `key: false` or `key: { enabled: false }`. */
+const toggle = z.union([z.boolean(), z.object({ enabled: z.boolean() })])
+
 const posts = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/posts" }),
   schema: z.object({
@@ -14,7 +17,30 @@ const posts = defineCollection({
     series_order: z.number().optional(),
     cover: z.string().optional(),
     draft: z.boolean().default(false),
-    toc: z.boolean().default(true),
+    toc: toggle.optional(),
+    comments: z
+      .union([
+        z.boolean(),
+        z.object({
+          enabled: z.boolean(),
+          system: z
+            .enum([
+              "giscus",
+              "disqus",
+              "utterances",
+              "waline",
+              "artalk",
+              "twikoo",
+              "comentario",
+            ])
+            .optional(),
+        }),
+      ])
+      .optional(),
+    katex: toggle.optional(),
+    mermaid: toggle.optional(),
+    lightbox: toggle.optional(),
+    license: z.union([z.string(), z.boolean()]).optional(),
   }),
 })
 

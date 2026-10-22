@@ -5,12 +5,21 @@ import { t } from "@/i18n"
 type Props = {
   url?: string
   title?: string
+  enabled?: boolean
+  system?: string
 }
 
-const { url = Astro.url.href, title = "" } = Astro.props
+const {
+  url = Astro.url.href,
+  title = "",
+  enabled = siteConfig.comments.enabled,
+  system = siteConfig.comments.system,
+} = Astro.props
 
-const { enabled, system } = siteConfig.comments
-const cfg = siteConfig.comments[system] as unknown as Record<string, string>
+const cfg = siteConfig.comments[system as keyof typeof siteConfig.comments] as unknown as Record<
+  string,
+  string
+>
 
 /** The one field each provider cannot work without. */
 const requiredField: Record<string, string> = {

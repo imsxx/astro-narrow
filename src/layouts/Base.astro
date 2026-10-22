@@ -31,6 +31,9 @@ type Props = {
   showReadingProgress?: boolean
   hasMermaid?: boolean
   hasImages?: boolean
+  tocEnabled?: boolean
+  commentsEnabled?: boolean
+  lightboxEnabled?: boolean
 }
 
 const {
@@ -44,10 +47,13 @@ const {
   showReadingProgress = siteConfig.readingProgress.enabled,
   hasMermaid = false,
   hasImages = false,
+  tocEnabled = siteConfig.toc.enabled,
+  commentsEnabled = siteConfig.comments.enabled,
+  lightboxEnabled = siteConfig.lightbox.enabled,
 } = Astro.props
 
 const hasToc = Boolean(
-  siteConfig.toc.enabled &&
+  tocEnabled &&
     headings?.some((heading) => heading.depth === 2 || heading.depth === 3),
 )
 
@@ -186,18 +192,18 @@ const pageStyle = [
       <Footer />
     </div>
 
-    <Dock showToc={hasToc} showComments={siteConfig.comments.enabled} />
+    <Dock showToc={hasToc} showComments={commentsEnabled} />
     {hasToc && headings && <Toc headings={headings} />}
     <SearchModal />
     <NavMenu />
-    <Mermaid enabled={siteConfig.mermaid.enabled && hasMermaid} />
+    <Mermaid enabled={hasMermaid} />
     <Gallery enabled={siteConfig.gallery.enabled && hasImages} />
     <script
       id="gallery-config"
       type="application/json"
       set:html={JSON.stringify({
         gallery: siteConfig.gallery.enabled,
-        lightbox: siteConfig.lightbox.enabled,
+        lightbox: lightboxEnabled,
         galleryOptions: { layout: siteConfig.gallery.defaultLayout },
       })}
     />

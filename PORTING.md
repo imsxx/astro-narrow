@@ -79,6 +79,19 @@ column.
 | `layouts/projects/single.html` | `src/pages/projects/[slug].astro` | rewritten |
 | `layouts/_partials/content/split-sections.html` | — | replaced (CSS-only timeline/resume layout) |
 
+### Per-page configuration
+
+Upstream merges page front matter over the site params in `_partials/config/*.html`. Two modules
+replace that:
+
+| Upstream | Here |
+| --- | --- |
+| `_partials/config/toc.html`, `config/comments.html` | `src/lib/toggles.ts` (`resolveToggle`, `resolveLicense`) |
+| `config/katex.html`, `config/gallery.html`, `render-image.html` | `src/lib/frontmatter-flags.ts` (reads the file being rendered) |
+
+`katex` and `mermaid` need the flag before rendering, so their toggles are read straight from the
+source file during the markdown pass. The rest are resolved in the page component.
+
 ## Shortcodes → MDX components
 
 Hugo shortcodes cannot run in Astro's markdown pipeline. The equivalents are MDX components: content
