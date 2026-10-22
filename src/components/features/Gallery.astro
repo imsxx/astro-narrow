@@ -1,0 +1,15 @@
+---
+type Props = {
+  enabled?: boolean
+}
+
+const { enabled = true } = Astro.props
+---
+
+{
+  enabled && (
+    <script>
+      import "@/scripts/gallery.js"
+    </script>
+  )
+}

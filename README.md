@@ -21,18 +21,39 @@ validation).
 - Code blocks: Shiki dual theme, language label, copy, collapse
 - Math: KaTeX rendered at build time
 - Diagrams: Mermaid loaded on demand, re-rendered on theme change
+- Images: adjacent images grouped into a gallery with layout switcher and lightbox
 - Embeds: button, link card, tabs, Bilibili, Tencent Video (MDX components)
 - Standalone pages: about, resume, timeline, projects
-- Comments: giscus (disabled by default)
+- Comments: giscus, disqus, utterances, waline, artalk, twikoo, comentario
+- Analytics: Google, Baidu, Clarity, Umami
+- UI locales: 13 languages generated from the upstream i18n files
 - Feeds: RSS, sitemap, SVG icon sprite endpoint
+
+## Feature switches
+
+Every feature is off the moment its switch is off — no markup, no script, no network request.
+All of them live in `src/config/site.ts` and are validated by Zod.
+
+| Switch | Default | Effect when off |
+| --- | --- | --- |
+| `announcement.enabled` | `false` | no banner |
+| `toc.enabled` | `true` | no TOC panel, dock button hidden |
+| `readingProgress.enabled` | `true` | no progress bar |
+| `search` | always on | index endpoint still generated |
+| `comments.enabled` + `system` | `false` | no comment markup; provider config required |
+| `analytics.provider` | `""` | no analytics script |
+| `katex.enabled` | `true` | math stays literal text, KaTeX plugin not registered |
+| `mermaid.enabled` | `true` | diagram blocks render as code, no runtime loaded |
+| `gallery.enabled` | `true` | images stay plain `<img>` |
+| `lightbox.enabled` | `true` | gallery has no lightbox |
+| `codeblock.collapse.enabled` | `true` | no collapse button |
+| `post.showRelated` | `true` | no related section |
 
 ## Not ported yet
 
-- KaTeX and Mermaid are available, but per-page front matter overrides are not
-- Comment providers other than giscus
-- Analytics integrations
-- Localized routes (UI copy is typed, but only `zh-hans` / `en` dictionaries exist)
-- Gallery lightbox and gallery layouts
+- Per-page front matter overrides (comments, katex, mermaid, lightbox are site-wide only)
+- Localized routes (UI copy switches via `lang`, content is single-locale)
+- Gallery layouts beyond the three the upstream script ships with
 
 ## Requirements
 

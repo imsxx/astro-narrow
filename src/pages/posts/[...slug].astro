@@ -23,6 +23,7 @@ const series = await seriesInfo(post)
 
 const license = siteConfig.post.license
 const hasMermaid = /```mermaid\b/.test(post.body ?? "")
+const hasImages = /!\[[^\]]*\]\(/.test(post.body ?? "")
 const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
 ---
 
@@ -33,6 +34,7 @@ const crumbs = [{ label: "文章", href: "/posts" }, { label: post.data.title }]
   series={series}
   headings={post.data.toc ? headings : []}
   hasMermaid={hasMermaid}
+  hasImages={hasImages}
 >
       <header class="mb-8">
         <div class="post-meta mb-8">

@@ -4,9 +4,13 @@ import sitemap from "@astrojs/sitemap"
 import mdx from "@astrojs/mdx"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
+import { siteConfig } from "./src/config/site"
 import { remarkMermaid } from "./src/lib/remark/mermaid"
 import { rehypeCodeBlockShell } from "./src/lib/rehype/code-block"
+import { rehypeImageFigure } from "./src/lib/rehype/image-figure"
 import { rehypeImageAttrs } from "./src/lib/rehype/image-attrs"
+
+const katexEnabled = siteConfig.katex.enabled
 
 export default defineConfig({
   site: "https://narrow.imsxx.com",
@@ -15,10 +19,13 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkMath, remarkMermaid],
+    remarkPlugins: [remarkMermaid, ...(katexEnabled ? [remarkMath] : [])] as never[],
     rehypePlugins: [
-      [rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }],
+      ...(katexEnabled
+        ? ([[rehypeKatex, { throwOnError: false, errorColor: "#cc0000" }]] as never[])
+        : []),
       rehypeCodeBlockShell,
+      rehypeImageFigure,
       rehypeImageAttrs,
     ],
     shikiConfig: {

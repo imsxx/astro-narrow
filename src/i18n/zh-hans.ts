@@ -114,3 +114,12 @@ export const zhHans = {
 }
 
 export type Dict = typeof zhHans
+
+/** Dictionaries for other locales may translate only part of the tree. */
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends (...args: never[]) => unknown
+    ? T[K]
+    : T[K] extends object
+      ? DeepPartial<T[K]>
+      : T[K]
+}

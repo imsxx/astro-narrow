@@ -22,10 +22,26 @@ export type NavItem = {
   children?: NavItem[]
 }
 
+const providerConfig = z.record(z.string(), z.string()).prefault({})
+
 const siteSchema = z.object({
   title: z.string(),
   description: z.string(),
-  lang: z.enum(["zh-hans", "en"]),
+  lang: z.enum([
+    "zh-hans",
+    "zh-hant",
+    "en",
+    "ar",
+    "de",
+    "es",
+    "fr",
+    "it",
+    "ja",
+    "ko",
+    "pt",
+    "ru",
+    "vi",
+  ]),
   keywords: z.array(z.string()).default([]),
   shortName: z.string().optional(),
   images: z.array(z.string()).default([]),
@@ -34,7 +50,7 @@ const siteSchema = z.object({
       svg: z.string().optional(),
       png: z.string().optional(),
     })
-    .default({}),
+    .prefault({}),
   pwa: z
     .object({
       backgroundColor: z.string().default("#ffffff"),
@@ -43,14 +59,15 @@ const siteSchema = z.object({
       orientation: z.string().default("portrait-primary"),
       appleTouchIcon: z.string().default(""),
     })
-    .default({}),
+    .prefault({}),
   announcement: z
     .object({
       enabled: z.boolean().default(false),
       message: z.string().default(""),
       type: z.enum(["info", "warning", "destructive"]).default("info"),
+      dismissible: z.boolean().default(true),
     })
-    .default({}),
+    .prefault({}),
   author: z.object({
     name: z.string(),
     title: z.string().default(""),
@@ -62,11 +79,11 @@ const siteSchema = z.object({
     .object({
       indexContentLength: z.number().int().positive().default(2000),
     })
-    .default({}),
+    .prefault({}),
   contentWidth: z.string().default("56rem"),
   backdropBlur: z.number().min(0).max(24).default(12),
   grainSize: z.number().min(0).max(100).default(25),
-  toc: z.object({ enabled: z.boolean().default(true) }).default({}),
+  toc: z.object({ enabled: z.boolean().default(true) }).prefault({}),
   colorScheme: z.string().default("default"),
   home: z
     .object({
@@ -75,14 +92,14 @@ const siteSchema = z.object({
         .array(z.string())
         .default(["author-section", "recent-posts", "featured-projects"]),
     })
-    .default({}),
+    .prefault({}),
   post: z
     .object({
       showRelated: z.boolean().default(true),
       relatedPostsCount: z.number().int().default(3),
       license: z.string().default(""),
     })
-    .default({}),
+    .prefault({}),
   comments: z
     .object({
       enabled: z.boolean().default(false),
@@ -111,23 +128,39 @@ const siteSchema = z.object({
           theme: z.string().default("preferred_color_scheme"),
           lang: z.string().default("zh-CN"),
         })
-        .default({}),
+        .prefault({}),
+      disqus: providerConfig,
+      utterances: providerConfig,
+      waline: providerConfig,
+      artalk: providerConfig,
+      twikoo: providerConfig,
+      comentario: providerConfig,
     })
-    .default({}),
+    .prefault({}),
   analytics: z
     .object({
       provider: z.enum(["", "google", "baidu", "clarity", "umami"]).default(""),
+      google: z.object({ id: z.string().default("") }).prefault({}),
+      baidu: z.object({ id: z.string().default("") }).prefault({}),
+      clarity: z.object({ id: z.string().default("") }).prefault({}),
+      umami: z
+        .object({
+          id: z.string().default(""),
+          src: z.string().default(""),
+          domains: z.string().default(""),
+        })
+        .prefault({}),
     })
-    .default({}),
-  katex: z.object({ enabled: z.boolean().default(true) }).default({}),
-  mermaid: z.object({ enabled: z.boolean().default(true) }).default({}),
+    .prefault({}),
+  katex: z.object({ enabled: z.boolean().default(true) }).prefault({}),
+  mermaid: z.object({ enabled: z.boolean().default(true) }).prefault({}),
   gallery: z
     .object({
       enabled: z.boolean().default(true),
       defaultLayout: z.enum(["justified", "masonry", "grid"]).default("justified"),
     })
-    .default({}),
-  lightbox: z.object({ enabled: z.boolean().default(true) }).default({}),
+    .prefault({}),
+  lightbox: z.object({ enabled: z.boolean().default(true) }).prefault({}),
   codeblock: z
     .object({
       collapse: z
@@ -137,20 +170,20 @@ const siteSchema = z.object({
           maxLines: z.number().int().default(30),
           collapsedHeight: z.number().int().default(120),
         })
-        .default({}),
+        .prefault({}),
     })
-    .default({}),
+    .prefault({}),
   readingProgress: z
     .object({
       enabled: z.boolean().default(true),
       showOnHomepage: z.boolean().default(false),
     })
-    .default({}),
+    .prefault({}),
   pagination: z
     .object({
       pageSize: z.number().int().positive().default(10),
     })
-    .default({}),
+    .prefault({}),
   nav: z.array(navItemSchema),
 })
 
@@ -174,6 +207,7 @@ export const siteConfig = siteSchema.parse({
     enabled: false,
     message: "",
     type: "info",
+    dismissible: true,
   },
   author: {
     name: "Your Name",
@@ -197,8 +231,36 @@ export const siteConfig = siteSchema.parse({
     relatedPostsCount: 3,
     license: "",
   },
-  comments: { enabled: false, system: "giscus" },
-  analytics: { provider: "" },
+  comments: {
+    enabled: false,
+    system: "giscus",
+    giscus: {
+      repo: "",
+      repoId: "",
+      category: "",
+      categoryId: "",
+      mapping: "pathname",
+      strict: "0",
+      reactionsEnabled: "1",
+      emitMetadata: "0",
+      inputPosition: "bottom",
+      theme: "preferred_color_scheme",
+      lang: "zh-CN",
+    },
+    disqus: {},
+    utterances: { issueTerm: "pathname", label: "comment", theme: "preferred-color-scheme" },
+    waline: {},
+    artalk: {},
+    twikoo: {},
+    comentario: {},
+  },
+  analytics: {
+    provider: "",
+    google: { id: "" },
+    baidu: { id: "" },
+    clarity: { id: "" },
+    umami: { id: "", src: "", domains: "" },
+  },
   katex: { enabled: true },
   mermaid: { enabled: true },
   gallery: { enabled: true, defaultLayout: "justified" },

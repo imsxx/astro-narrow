@@ -3,7 +3,7 @@ import "@/styles/main.css"
 import "katex/dist/katex.min.css"
 import { siteConfig } from "@/config/site"
 import { colorSchemeKeys } from "@/lib/themes"
-import { t } from "@/i18n"
+import { isRtl, t } from "@/i18n"
 import Dock from "@/components/ui/Dock.astro"
 import ReadingProgress from "@/components/ui/ReadingProgress.astro"
 import ContextBar from "@/components/ui/ContextBar.astro"
@@ -11,6 +11,9 @@ import Toc from "@/components/ui/Toc.astro"
 import SearchModal from "@/components/ui/SearchModal.astro"
 import NavMenu from "@/components/ui/NavMenu.astro"
 import Mermaid from "@/components/features/Mermaid.astro"
+import Announcement from "@/components/features/Announcement.astro"
+import Analytics from "@/components/features/Analytics.astro"
+import Gallery from "@/components/features/Gallery.astro"
 import Footer from "@/components/ui/Footer.astro"
 import type { SeriesContext } from "@/lib/posts"
 import type { MarkdownHeading } from "astro"
@@ -27,6 +30,7 @@ type Props = {
   headings?: MarkdownHeading[]
   showReadingProgress?: boolean
   hasMermaid?: boolean
+  hasImages?: boolean
 }
 
 const {
@@ -39,6 +43,7 @@ const {
   headings,
   showReadingProgress = siteConfig.readingProgress.enabled,
   hasMermaid = false,
+  hasImages = false,
 } = Astro.props
 
 const hasToc = Boolean(
@@ -62,7 +67,7 @@ const pageStyle = [
 <!doctype html>
 <html
   lang={siteConfig.lang}
-  dir="ltr"
+  dir={isRtl ? "rtl" : "ltr"}
   data-theme={siteConfig.colorScheme}
   data-toc-pinned="false"
 >
@@ -169,6 +174,7 @@ const pageStyle = [
     {showReadingProgress && <ReadingProgress />}
 
     <div id="page-container" style={pageStyle}>
+      <Announcement />
       {crumbs && crumbs.length > 0 && <ContextBar crumbs={crumbs} series={series} />}
 
       <main id="main-content" tabindex="-1" class="page-main">
@@ -184,7 +190,19 @@ const pageStyle = [
     {hasToc && headings && <Toc headings={headings} />}
     <SearchModal />
     <NavMenu />
-    <Mermaid enabled={hasMermaid} />
+    <Mermaid enabled={siteConfig.mermaid.enabled && hasMermaid} />
+    <Gallery enabled={siteConfig.gallery.enabled && hasImages} />
+    <script
+      id="gallery-config"
+      type="application/json"
+      set:html={JSON.stringify({
+        gallery: siteConfig.gallery.enabled,
+        lightbox: siteConfig.lightbox.enabled,
+        galleryOptions: { layout: siteConfig.gallery.defaultLayout },
+      })}
+    />
+    
+    <Analytics />
     <script
       id="search-config"
       type="application/json"

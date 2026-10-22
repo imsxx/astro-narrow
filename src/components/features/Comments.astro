@@ -2,35 +2,200 @@
 import { siteConfig } from "@/config/site"
 import { t } from "@/i18n"
 
-const { enabled, system, giscus } = siteConfig.comments
-const show = enabled && system === "giscus" && Boolean(giscus.repo && giscus.repoId)
+type Props = {
+  url?: string
+  title?: string
+}
+
+const { url = Astro.url.href, title = "" } = Astro.props
+
+const { enabled, system } = siteConfig.comments
+const cfg = siteConfig.comments[system] as unknown as Record<string, string>
+
+/** The one field each provider cannot work without. */
+const requiredField: Record<string, string> = {
+  giscus: "repoId",
+  disqus: "shortname",
+  utterances: "repo",
+  waline: "serverURL",
+  artalk: "server",
+  twikoo: "envId",
+  comentario: "server",
+}
+
+const ready = enabled && Boolean(cfg?.[requiredField[system]])
+const pagePath = Astro.url.pathname
 ---
 
 {
-  show && (
-    <section id="comments" class="border-border mt-12 border-t pt-8">
+  ready && (
+    <section id="comments" class="border-border mt-10 border-t pt-8">
       <h2 class="text-foreground mb-4 text-lg font-semibold tracking-tight">
         {t.comments.title}
       </h2>
-      <div class="giscus" />
+
+      <div class="comments-container">
+        {system === "giscus" && <div class="giscus" />}
+        {system === "disqus" && <div id="disqus_thread" />}
+        {system === "utterances" && <div id="utterances-comments" />}
+        {system === "waline" && <div id="waline-comments" />}
+        {system === "artalk" && <div id="artalk-comments" />}
+        {system === "twikoo" && <div id="twikoo-comments" />}
+        {system === "comentario" && (
+          <div
+            id="comentario-comments"
+            data-comentario
+            data-site-id={cfg.siteId}
+            data-page-id={url}
+            data-theme={cfg.theme ?? "light"}
+          />
+        )}
+      </div>
+    </section>
+  )
+}
+
+{
+  ready && system === "giscus" && (
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={cfg.repo}
+      data-repo-id={cfg.repoId}
+      data-category={cfg.category}
+      data-category-id={cfg.categoryId}
+      data-mapping={cfg.mapping}
+      data-strict={cfg.strict}
+      data-reactions-enabled={cfg.reactionsEnabled}
+      data-emit-metadata={cfg.emitMetadata}
+      data-input-position={cfg.inputPosition}
+      data-theme={cfg.theme}
+      data-lang={cfg.lang}
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async
+    />
+  )
+}
+
+{
+  ready && system === "disqus" && (
+    <script is:inline define:vars={{ shortname: cfg.shortname, pageUrl: url, pageTitle: title }}>
+      var disqus_config = function () {
+        this.page.url = pageUrl
+        this.page.identifier = pageUrl
+        this.page.title = pageTitle
+      }
+      ;(() => {
+        const d = document
+        const s = d.createElement("script")
+        s.src = `https://${shortname}.disqus.com/embed.js`
+        s.setAttribute("data-timestamp", String(+new Date()))
+        ;(d.head || d.body).appendChild(s)
+      })()
+    </script>
+  )
+}
+
+{
+  ready && system === "utterances" && (
+    <>
       <script
         is:inline
-        src="https://giscus.app/client.js"
-        data-repo={giscus.repo}
-        data-repo-id={giscus.repoId}
-        data-category={giscus.category}
-        data-category-id={giscus.categoryId}
-        data-mapping={giscus.mapping}
-        data-strict={giscus.strict}
-        data-reactions-enabled={giscus.reactionsEnabled}
-        data-emit-metadata={giscus.emitMetadata}
-        data-input-position={giscus.inputPosition}
-        data-theme={giscus.theme}
-        data-lang={giscus.lang}
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async
+        define:vars={{
+          repo: cfg.repo,
+          issueTerm: cfg.issueTerm ?? "pathname",
+          label: cfg.label ?? "comment",
+          theme: cfg.theme ?? "preferred-color-scheme",
+        }}
+      >
+        ;(() => {
+          const script = document.createElement("script")
+          script.src = "https://utteranc.es/client.js"
+          script.setAttribute("repo", repo)
+          script.setAttribute("issue-term", issueTerm)
+          script.setAttribute("label", label)
+          script.setAttribute("theme", theme)
+          script.setAttribute("crossorigin", "anonymous")
+          script.async = true
+          document.getElementById("utterances-comments")?.appendChild(script)
+        })()
+      </script>
+      <script is:inline>
+        const syncUtterancesTheme = () => {
+          const frame = document.querySelector("#utterances-comments .utterances-frame")
+          if (!frame) return
+          frame.contentWindow?.postMessage(
+            {
+              type: "set-theme",
+              theme: document.documentElement.classList.contains("dark")
+                ? "github-dark"
+                : "github-light",
+            },
+            "https://utteranc.es",
+          )
+        }
+        document.addEventListener("themeChanged", syncUtterancesTheme)
+      </script>
+    </>
+  )
+}
+
+{
+  ready && system === "waline" && (
+    <>
+      <link rel="stylesheet" href="https://unpkg.com/@waline/client@3.16.1/dist/waline.css" />
+      <script is:inline type="module" define:vars={{ serverURL: cfg.serverURL, lang: cfg.lang ?? "zh-CN" }}>
+        import { init } from "https://unpkg.com/@waline/client@3.16.1/dist/waline.js"
+        init({
+          el: "#waline-comments",
+          serverURL,
+          dark: "html.dark",
+          lang,
+        })
+      </script>
+    </>
+  )
+}
+
+{
+  ready && system === "artalk" && (
+    <script is:inline type="module" define:vars={{ server: cfg.server, site: cfg.site ?? "", locale: cfg.locale ?? "zh-CN" }}>
+      import Artalk from "https://unpkg.com/artalk@2.9.1/dist/Artalk.mjs"
+      Artalk.init({
+        el: "#artalk-comments",
+        server,
+        site,
+        locale,
+        darkMode: "auto",
+      })
+    </script>
+  )
+}
+
+{
+  ready && system === "twikoo" && (
+    <script is:inline type="module" define:vars={{ envId: cfg.envId, lang: cfg.lang ?? "zh-CN", region: cfg.region ?? "", pagePath }}>
+      const { init } = await import("https://unpkg.com/twikoo@1.6.39/dist/twikoo.all.min.js")
+      init({
+        el: "#twikoo-comments",
+        envId,
+        region: region || undefined,
+        path: pagePath,
+        lang,
+      })
+    </script>
+  )
+}
+
+{
+  ready && system === "comentario" && (
+    <>
+      <script
+        is:inline
+        defer
+        src={`${cfg.server.replace(/\/+$/, "")}/comentario.js`}
       />
-    </section>
+    </>
   )
 }

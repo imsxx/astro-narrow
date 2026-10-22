@@ -1,6 +1,12 @@
-import { h } from "hastscript"
+import { h as hastscript } from "hastscript"
 import { t } from "../../i18n"
 import { siteConfig } from "../../config/site"
+
+const h = hastscript as unknown as (
+  selector: string,
+  properties?: Record<string, unknown>,
+  ...children: unknown[]
+) => HastNode
 
 type HastNode = {
   type: string

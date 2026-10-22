@@ -32,6 +32,7 @@
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.1.17",
     "hastscript": "^9.0.1",
+    "smol-toml": "^1.9.1",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   }
