@@ -49,6 +49,7 @@ export const zh_hant: DeepPartial<Dict> = {
     tocPin: "固定目錄",
     tocUnpin: "取消固定目錄",
     tocClose: "關閉目錄",
+    galleryLayoutSwitch: "切換圖庫佈局",
     searchClear: "清空",
     searchPlaceholder: "搜尋文章...",
     searchClose: "關閉",

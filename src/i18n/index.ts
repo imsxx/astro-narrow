@@ -2,6 +2,7 @@ import { siteConfig } from "../config/site"
 import { en } from "./en"
 import { zhHans, type DeepPartial, type Dict } from "./zh-hans"
 import { ar } from "./ar"
+import { bn } from "./bn"
 import { de } from "./de"
 import { es } from "./es"
 import { fr } from "./fr"
@@ -20,6 +21,7 @@ const dictionaries: Record<string, DeepPartial<Dict>> = {
   "zh-hant": zh_hant,
   en,
   ar,
+  bn,
   de,
   es,
   fr,

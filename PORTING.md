@@ -1,6 +1,6 @@
 # Porting map
 
-Upstream snapshot: `hugo-narrow v2.0.2`.
+Upstream snapshot: `hugo-narrow v2.1.0`.
 Status values: **copied** (verbatim, safe to overwrite), **rewritten** (same behaviour, Astro
 structure), **replaced** (upstream logic dropped because Astro has a native equivalent).
 
@@ -28,6 +28,7 @@ column.
 | `assets/icons/*.svg` | `src/icons/*.svg` | copied |
 | `layouts/_partials/features/icon-sprite.html` | `src/pages/icons/sprite.svg.ts` | rewritten |
 | `assets/js/*.js` | `src/scripts/*.js` | copied |
+| `assets/js/vendor/*.js` (MiniSearch, smart-gallery) | `src/scripts/vendor/*.js` | copied (vendored bundle, not edited) |
 | `assets/js/theme-init.js` | inline script in `src/layouts/Base.astro` | rewritten (Hugo templating removed) |
 
 ## Layouts
@@ -45,8 +46,9 @@ column.
 | `layouts/_partials/ui/dock.html` | `src/components/ui/Dock.astro` | rewritten |
 | `layouts/_partials/ui/appearance-popover.html` | `src/components/ui/AppearancePopover.astro` | rewritten |
 | `layouts/_partials/ui/toc.html` | `src/components/ui/Toc.astro` | rewritten |
-| `layouts/_partials/ui/search-modal.html` | `src/components/ui/SearchModal.astro` | rewritten |
+| `layouts/_partials/ui/search-modal.html` | `src/components/ui/SearchModal.astro` | rewritten (rendered only when `search.enabled`) |
 | `layouts/_partials/ui/reading-progress.html` | `src/components/ui/ReadingProgress.astro` | rewritten |
+| `layouts/_partials/ui/gallery-switcher.html` | `<template>` inside `src/components/features/Gallery.astro` | rewritten (cloned by `gallery.js`) |
 | `layouts/_partials/navigation/context-bar.html` | `src/components/ui/ContextBar.astro` | rewritten |
 | `layouts/_partials/navigation/nav-popover.html` + `nav-menu.html` | `src/components/ui/NavMenu.astro` | rewritten |
 | `layouts/_partials/navigation/pagination.html` | `src/components/navigation/Pagination.astro` | rewritten |
@@ -58,7 +60,7 @@ column.
 | `layouts/_partials/content/post-list.html` | `src/components/content/PostFeed.astro` | rewritten |
 | `layouts/_partials/content/related-posts.html` | `src/components/content/RelatedPosts.astro` | rewritten |
 | `layouts/_partials/content/post-meta.html` | inline in `posts/[...slug].astro` | rewritten |
-| `layouts/_partials/content/image-processor.html` | — | replaced (`astro:assets`) |
+| `layouts/_partials/content/image-processor.html` + `config/image.html` | — | replaced (`astro:assets`; see below) |
 | `layouts/_markup/render-codeblock.html` | `src/lib/rehype/code-block.ts` | rewritten |
 | `layouts/_markup/render-blockquote.html` | `src/lib/rehype/alert.ts` | rewritten |
 | `layouts/_markup/render-image.html` | `src/lib/rehype/image-attrs.ts` | rewritten |
@@ -67,9 +69,11 @@ column.
 | `layouts/_partials/layout/footer.html` | `src/components/ui/Footer.astro` | rewritten |
 | `layouts/index.json` | `src/pages/search-index.json.ts` | rewritten |
 | `layouts/_partials/features/comments.html` + all providers | `src/components/features/Comments.astro` | rewritten (7 providers in one component) |
+| `layouts/_partials/features/comments/theme-sync.html` | `src/components/features/CommentsThemeSync.astro` | rewritten (same `themeChanged` listener, provider passed as a prop) |
+| `layouts/_partials/config/search.html` | `siteConfig.search` + gating in `Base.astro` | rewritten |
 | `layouts/_partials/features/analytics/*` | `src/components/features/Analytics.astro` | rewritten (4 providers) |
 | `layouts/_partials/features/announcement.html` | `src/components/features/Announcement.astro` | rewritten |
-| `layouts/_partials/content/image-processor.html` | `src/lib/rehype/image-figure.ts` + `astro:assets` | replaced |
+| `layouts/_partials/content/image-processor.html` + `config/image.html` | `src/lib/rehype/image-figure.ts` + `astro:assets` | replaced (see below) |
 | `layouts/_partials/features/katex.html` | `remark-math` + `rehype-katex` in `astro.config.ts` | replaced (build-time rendering) |
 | `layouts/_partials/features/mermaid.html` | `src/components/features/Mermaid.astro` | rewritten (dynamic import) |
 | `layouts/_markup/render-codeblock-mermaid.html` | `src/lib/remark/mermaid.ts` | rewritten |
@@ -89,9 +93,23 @@ replace that:
 | --- | --- |
 | `_partials/config/toc.html`, `config/comments.html` | `src/lib/toggles.ts` (`resolveToggle`, `resolveLicense`) |
 | `config/katex.html`, `config/gallery.html`, `render-image.html` | `src/lib/frontmatter-flags.ts` (reads the file being rendered) |
+| `config/gallery.html` layout values, `config/search.html` | `src/content.config.ts` + `src/config/site.ts`, merged in `posts/[...slug].astro` |
 
 `katex` and `mermaid` need the flag before rendering, so their toggles are read straight from the
-source file during the markdown pass. The rest are resolved in the page component.
+source file during the markdown pass. Gallery options are structured front matter, validated by the
+content schema and merged over `siteConfig.gallery` in the page. The rest are resolved in the page
+component.
+
+`comments.system` became `comments.provider` in v2.1.0, both in site config and in front matter.
+
+### Images
+
+Upstream only builds a responsive width ladder for Hugo page bundles and `assets/` resources; images
+referenced by a plain path (`/images/...`, remote URLs) keep their original URL and get no `srcset`.
+The port renders every markdown image as a plain `<img>` with `loading="lazy"` / `decoding="async"`
+and the `figure.image-figure` shell the gallery scripts expect, so those images match upstream's
+static branch. `astro:assets` handles the processed case instead, through `<Image>` / `<Picture>` in
+MDX; `params.image.webp` and `params.image.quality` have no counterpart here.
 
 ## Shortcodes → MDX components
 
@@ -102,7 +120,7 @@ files that need them use `.mdx` and import the component.
 | --- | --- | --- |
 | `_shortcodes/button.html` | `src/components/embeds/Button.astro` | variant / size / icon / target |
 | `_shortcodes/link.html` | `src/components/embeds/LinkCard.astro` | single card form; group form dropped |
-| `_shortcodes/tabs.html` + `tab.html` | `src/components/embeds/Tabs.astro` + `Tab.astro` | nav is generated by `tabs.js` |
+| `_shortcodes/tabs.html` + `tab.html` | `src/components/embeds/Tabs.astro` + `Tab.astro` | tablist rendered at build time; `tabs.js` only handles state |
 | `_shortcodes/icon.html` | `src/components/Icon.astro` | already used everywhere |
 | `_shortcodes/bilibili.html` | `src/components/embeds/Bilibili.astro` | |
 | `_shortcodes/tencent.html` | `src/components/embeds/Tencent.astro` | |
@@ -114,7 +132,7 @@ files that need them use `.mdx` and import the component.
 | `data/themes.yaml` | `src/lib/themes.ts` | rewritten |
 | `exampleSite/config/_default/params.yaml` | `src/config/site.ts` | rewritten (Zod validated) |
 | `exampleSite/config/_default/menus.yaml` | `nav` in `src/config/site.ts` | rewritten |
-| `i18n/*.toml` (13 locales) | `src/i18n/*.ts` | generated by `scripts/build-i18n.mjs` |
+| `i18n/*.toml` (14 locales) | `src/i18n/*.ts` | generated by `scripts/build-i18n.mjs` |
 | `i18n/zh-hans.toml`, `i18n/en.toml` | `src/i18n/zh-hans.ts`, `src/i18n/en.ts` | rewritten by hand (baseline + types) |
 | `assets/js/theme-init.js` | inline script in `Base.astro` | rewritten (Hugo templating removed) |
 

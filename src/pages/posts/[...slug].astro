@@ -33,10 +33,16 @@ const pageComments = resolveToggle(
   post.data.comments,
   siteConfig.comments.enabled,
 )
-const pageSystem =
+const pageProvider =
   typeof post.data.comments === "object"
-    ? (post.data.comments.system ?? siteConfig.comments.system)
-    : siteConfig.comments.system
+    ? (post.data.comments.provider ?? siteConfig.comments.provider)
+    : siteConfig.comments.provider
+const pageGallery =
+  typeof post.data.gallery === "object"
+    ? post.data.gallery
+    : post.data.gallery === false
+      ? { enabled: false }
+      : undefined
 const pageMermaid = resolveToggle(post.data.mermaid, siteConfig.mermaid.enabled)
 const pageLightbox = resolveToggle(
   post.data.lightbox,
@@ -61,6 +67,8 @@ import { url } from "@/lib/url"
   tocEnabled={pageToc}
   commentsEnabled={pageComments}
   lightboxEnabled={pageLightbox}
+  gallery={pageGallery}
+  article
 >
   {post.data.cover && (
     <div class="border-border mb-8 overflow-hidden rounded-lg border">
@@ -157,5 +165,5 @@ import { url } from "@/lib/url"
   </nav>
 
   <RelatedPosts post={post} />
-  <Comments enabled={pageComments} system={pageSystem} />
+  <Comments enabled={pageComments} provider={pageProvider} />
 </Base>

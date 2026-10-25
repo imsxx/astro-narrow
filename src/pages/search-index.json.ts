@@ -2,6 +2,7 @@ import type { APIRoute } from "astro"
 import { siteConfig } from "@/config/site"
 import { getPosts, readingTime, summaryOf } from "@/lib/posts"
 import { formatDate } from "@/lib/date"
+import { url } from "@/lib/url"
 
 function plain(body: string): string {
   return body
@@ -16,6 +17,13 @@ function plain(body: string): string {
 }
 
 export const GET: APIRoute = async () => {
+  // With search off the index stays empty rather than 404-ing the request.
+  if (!siteConfig.search.enabled) {
+    return new Response("[]", {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+    })
+  }
+
   const posts = await getPosts()
   const limit = siteConfig.search.indexContentLength
 
@@ -23,7 +31,7 @@ export const GET: APIRoute = async () => {
     title: post.data.title,
     summary: summaryOf(post),
     content: plain(post.body ?? "").slice(0, limit),
-    permalink: `/posts/${post.id}/`,
+    permalink: url(`/posts/${post.id}/`),
     section: "posts",
     date: formatDate(post.data.date),
     readingTime: readingTime(post.body ?? ""),

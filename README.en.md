@@ -9,7 +9,7 @@ and visual output follow the upstream theme; the implementation uses Astro's nat
 wherever they replace hand-rolled Hugo logic (image pipeline, code highlighting, TOC, config
 validation).
 
-- Upstream: `hugo-narrow v2.0.2`
+- Upstream: `hugo-narrow v2.1.0`
 - Built on Astro 7 + Tailwind CSS 4
 - Live demo: [imsxx.com](https://imsxx.com) — the author's blog, running this theme unmodified
 
@@ -18,18 +18,22 @@ validation).
 - Layout shell: content column, floating dock, breadcrumb context bar, footer
 - Appearance panel: 12 colour schemes, light/dark/system, width / blur / grain sliders
 - Posts: header meta, prose typography, TOC panel with pin, reading progress, prev/next,
-  related posts, series progress bar and popover
+  related posts, series progress bar and popover. The context bar collapses into a title capsule
+  while scrolling and expands back to the breadcrumb on click
 - Lists: posts with pagination, archives by year/month, tags, categories, series
-- Search: client-side index with Ctrl+K modal
+- Search: MiniSearch index (CJK segmented by word) with a Ctrl+K modal; turning search off removes
+  the dock button, the dialog and the bundle
 - Code blocks: Shiki dual theme, language label, copy, collapse
 - Math: KaTeX rendered at build time
 - Diagrams: Mermaid loaded on demand, re-rendered on theme change
-- Images: adjacent images grouped into a gallery with layout switcher and lightbox
-- Embeds: button, link card, tabs, Bilibili, Tencent Video (MDX components)
+- Images: adjacent images grouped into a gallery; one button cycles justified / masonry / grid, and
+  the layout values are configurable
+- Embeds: button, link card, tabs (first panel visible without JavaScript), Bilibili, Tencent Video
+  (MDX components)
 - Standalone pages: about, resume, timeline, projects
-- Comments: giscus, disqus, utterances, waline, artalk, twikoo, comentario
+- Comments: giscus, disqus, utterances, waline, artalk, twikoo, comentario, with theme sync
 - Analytics: Google, Baidu, Clarity, Umami
-- UI locales: 13 languages generated from the upstream i18n files
+- UI locales: 14 languages generated from the upstream i18n files
 - Feeds: RSS, sitemap, SVG icon sprite endpoint, web manifest
 
 ## Feature switches
@@ -42,8 +46,8 @@ All of them live in `src/config/site.ts` and are validated by Zod.
 | `announcement.enabled` | `false` | no banner |
 | `toc.enabled` | `true` | no TOC panel, dock button hidden |
 | `readingProgress.enabled` | `true` | no progress bar |
-| `search` | always on | index endpoint still generated |
-| `comments.enabled` + `system` | `false` | no comment markup; provider config required |
+| `search.enabled` | `true` | no dock button, no dialog, no search bundle; the index endpoint returns `[]` |
+| `comments.enabled` + `provider` | `false` | no comment markup; provider config required |
 | `analytics.provider` | `""` | no analytics script |
 | `katex.enabled` | `true` | math stays literal text, KaTeX plugin not registered |
 | `mermaid.enabled` | `true` | diagram blocks render as code, no runtime loaded |
@@ -52,13 +56,19 @@ All of them live in `src/config/site.ts` and are validated by Zod.
 | `codeblock.collapse.enabled` | `true` | no collapse button |
 | `post.showRelated` | `true` | no related section |
 
+> Upgrading from 1.x: `comments.system` is now `comments.provider`, in site config and in page front
+> matter. The old key shows the "not configured" notice. Search gained `search.enabled`, on by
+> default, which keeps the previous behaviour.
+
 ### Page-level overrides
 
 A post can override the site default in its front matter:
 
 ```yaml
 toc: false
-comments: false # or { enabled: true, system: "giscus" }
+comments: false # or { enabled: true, provider: "giscus" }
+gallery:
+  defaultLayout: masonry # plus gap / columns / targetRowHeight / columnWidth
 katex: false
 mermaid: false
 lightbox: false
@@ -73,6 +83,10 @@ literal source instead of being half-processed.
 
 - Localized routes (UI copy switches via `lang`, content is single-locale)
 - Gallery layouts beyond the three the upstream script ships with
+- Responsive width ladders and WebP variants for local images. Upstream only processes Hugo page
+  bundles and `assets/` resources; plain markdown paths and static-directory images are passed
+  through there too. On the Astro side use `<Image>` / `<Picture>` in MDX and let `astro:assets`
+  generate the variants at build time.
 
 ## Requirements
 

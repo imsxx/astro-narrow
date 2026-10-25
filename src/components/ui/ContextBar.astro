@@ -8,45 +8,77 @@ type Crumb = { label: string; href?: string }
 type Props = {
   crumbs: Crumb[]
   series?: SeriesContext | null
+  /** Article pages collapse into a title capsule while scrolling. */
+  collapsible?: boolean
 }
 
-const { crumbs, series } = Astro.props
+const { crumbs, series, collapsible = false } = Astro.props
 const trail: Crumb[] = [{ label: t.nav.home, href: "/" }, ...crumbs]
+const current = trail[trail.length - 1]
 import { url } from "@/lib/url"
 ---
 
-<header id="context-bar">
-  <nav aria-label={t.nav.breadcrumb} class="context-crumbs">
-    <ol class="crumb-trail">
-      {trail.map((item, index) => (
-          <>
-            {index > 0 && (
-              <li class="crumb-sep" aria-hidden="true">
-                <Icon name="chevron-right" size="sm" class="icon-directional" />
-              </li>
-            )}
-            <li class="crumb-node">
-              {item.href && index < trail.length - 1 ? (
-                <a href={url(item.href)} class="crumb" title={item.label}>
-                  {index === 0 ? (
-                    <>
-                      <Icon name="home" size="sm" />
-                      <span class="hidden max-w-32 truncate sm:inline">{item.label}</span>
-                    </>
-                  ) : (
-                    <span class="max-w-40 truncate sm:max-w-56">{item.label}</span>
-                  )}
-                </a>
-              ) : (
-                <span class="crumb crumb-current" aria-current="page" title={item.label}>
-                  <span class="max-w-56 truncate sm:max-w-96">{item.label}</span>
-                </span>
+<header
+  id="context-bar"
+  data-collapsed="false"
+  data-visible="true"
+  data-collapsible={collapsible ? "true" : undefined}
+>
+  <div class="context-top">
+    <nav aria-label={t.nav.breadcrumb} class="context-crumbs">
+      <ol class="crumb-trail">
+        {trail.map((item, index) => (
+            <>
+              {index > 0 && (
+                <li class="crumb-sep" aria-hidden="true">
+                  <Icon name="chevron-right" size="sm" class="icon-directional" />
+                </li>
               )}
-            </li>
-          </>
-        ))}
-    </ol>
-  </nav>
+              <li class="crumb-node">
+                {item.href && index < trail.length - 1 ? (
+                  <a
+                    href={url(item.href)}
+                    class="crumb"
+                    title={item.label}
+                    aria-label={index === 0 ? item.label : undefined}
+                  >
+                    {index === 0 ? (
+                      <>
+                        <Icon name="home" size="sm" />
+                        <span class="hidden max-w-32 truncate sm:inline">{item.label}</span>
+                      </>
+                    ) : (
+                      <span class="max-w-40 truncate sm:max-w-56">{item.label}</span>
+                    )}
+                  </a>
+                ) : (
+                  <span class="crumb crumb-current" aria-current="page" title={item.label}>
+                    <span class="max-w-56 truncate sm:max-w-96">{item.label}</span>
+                  </span>
+                )}
+              </li>
+            </>
+          ))}
+      </ol>
+    </nav>
+
+    {collapsible && (
+        <button
+          id="context-pill"
+          type="button"
+          class="context-pill"
+          aria-label={`${t.nav.breadcrumb}: ${current.label}`}
+          title={current.label}
+        >
+          <span class="context-pill-title truncate">{current.label}</span>
+          {series && (
+              <span class="context-pill-badge tabular-nums">
+                {series.current}/{series.total}
+              </span>
+            )}
+        </button>
+      )}
+  </div>
 
   {series && (
       <>

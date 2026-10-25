@@ -1,11 +1,37 @@
 # Changelog
 
-## 1.2.2
+## 2.0.0
 
-- Internal: move `markdown.remarkPlugins` / `markdown.rehypePlugins` to `markdown.processor` with
-  `unified()` from `@astrojs/markdown-remark`. Astro 7 deprecates the old options and will remove them
-  in a future major. No behaviour change — KaTeX, Mermaid, alerts, galleries and heading anchors all
-  render as before.
+Syncs `hugo-narrow v2.1.0`.
+
+**Breaking:** `comments.system` is now `comments.provider`, in site config and in page front matter.
+Rename the key and everything else keeps working; leave it on `system` and comments show the
+"not configured" notice instead of loading.
+
+- Search runs on MiniSearch with `Intl.Segmenter`, so Chinese, Japanese and other unspaced languages
+  match by word instead of by substring. The engine is vendored with the theme, `search.js` is its
+  own bundle, and turning `search.enabled` off removes the dock button, the dialog, the script and
+  the index content (the endpoint returns `[]`).
+- The context bar on article pages hides while scrolling down and returns as a title capsule while
+  scrolling up; clicking or tapping the capsule expands the breadcrumb again. Other page kinds keep
+  the static trail.
+- Every gallery layout value (`gap`, `columns`, `targetRowHeight`, `lastRowBehavior`, `columnWidth`)
+  can now be set in `siteConfig.gallery` and overridden per post in front matter. The layout switcher
+  is a single cycling button, and `gallery.js` uses the vendored smart-gallery instead of a CDN
+  build.
+- Comments follow the upstream breaking change: `comments.system` is now `comments.provider` in both
+  site config and front matter. giscus requires `repo`, `repoId` and `categoryId` together; a
+  provider with missing keys, or one the theme does not ship, shows the "not configured" notice
+  instead of loading an empty embed. Theme changes are forwarded to giscus, utterances, twikoo,
+  artalk and comentario.
+- Tabs render their tablist at build time, so the tabs are usable and the first panel is visible with
+  JavaScript disabled.
+- Safe-area insets are respected on notched devices, and small controls grow to a comfortable tap
+  size on coarse pointers (dock, series steps, gallery switcher, search clear, announcement close).
+- The icon sprite only strips the root `width`/`height` now, so icons with sized shapes inside them
+  (the GitHub mark, the new layout icon) draw correctly.
+- Added Bengali (`bn`) to the locales and `ui.galleryLayoutSwitch`.
+- Chore: the duplicated 1.2.2 entry is gone from this file.
 
 ## 1.2.2
 

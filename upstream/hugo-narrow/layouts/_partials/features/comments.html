@@ -13,11 +13,11 @@
 */}}
 
 {{- $commentsConfig := partial "config/comments.html" . -}}
+{{- $provider := $commentsConfig.provider -}}
 
-{{/* 判断是否加载评论 */}}
-{{- if and $commentsConfig.enabled $commentsConfig.system -}}
-  {{- $commentSystem := $commentsConfig.system -}}
-  {{- $providerConfig := index $commentsConfig $commentSystem | default dict -}}
+{{/* Whether to load comments */}}
+{{- if and $commentsConfig.enabled $provider -}}
+  {{- $providerConfig := index $commentsConfig $provider | default dict -}}
   <section id="comments" class="border-border mt-10 border-t pt-8">
     <div>
       <h2 class="text-foreground mb-4 text-lg font-semibold">
@@ -25,22 +25,14 @@
       </h2>
 
       <div class="comments-container">
-        {{- if eq $commentSystem "giscus" -}}
-          {{ partial "features/comments/giscus.html" (dict "Site" $.Site "Page" $ "id" "giscus-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "disqus" -}}
-          {{ partial "features/comments/disqus.html" (dict "Site" $.Site "Page" $ "id" "disqus-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "utterances" -}}
-          {{ partial "features/comments/utterances.html" (dict "Site" $.Site "Page" $ "id" "utterances-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "waline" -}}
-          {{ partial "features/comments/waline.html" (dict "Site" $.Site "Page" $ "id" "waline-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "artalk" -}}
-          {{ partial "features/comments/artalk.html" (dict "Site" $.Site "Page" $ "id" "artalk-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "twikoo" -}}
-          {{ partial "features/comments/twikoo.html" (dict "Site" $.Site "Page" $ "id" "twikoo-comments" "config" $providerConfig) }}
-        {{- else if eq $commentSystem "comentario" -}}
-          {{ partial "features/comments/comentario.html" (dict "Site" $.Site "Page" $ "id" "comentario-comments" "config" $providerConfig) }}
+        {{/* A site can add its own provider by dropping a partial with the same name in its
+          own layouts/_partials/features/comments/ directory.
+        */}}
+        {{- $templatePath := printf "features/comments/%s.html" $provider -}}
+        {{- if templates.Exists (printf "_partials/%s" $templatePath) -}}
+          {{ partial $templatePath (dict "Site" $.Site "Page" $ "id" (printf "%s-comments" $provider) "config" $providerConfig) }}
         {{- else -}}
-          {{- /* 不支持的评论系统 */ -}}
+          {{- warnidf "comments-provider" "comments.provider %q has no matching partial: features/comments/%s.html" $provider $provider -}}
           {{ partial "features/comments/notice.html" (dict "icon" "alert-circle") }}
         {{- end -}}
       </div>

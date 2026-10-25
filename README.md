@@ -6,7 +6,7 @@
 
 这不是逐行翻译模板，而是按 Astro 的方式重写了一遍：功能与视觉对齐上游，实现上凡是能换成 Astro 原生能力的地方都换掉了（图片管线、代码高亮、目录、配置校验）。
 
-- 上游版本：`hugo-narrow v2.0.2`
+- 上游版本：`hugo-narrow v2.1.0`
 - 技术栈：Astro 7 + Tailwind CSS 4
 - 在线示例：[imsxx.com](https://imsxx.com)——作者的博客，跑的就是这个主题，没有二次定制
 
@@ -15,17 +15,18 @@
 - 布局骨架：单栏正文、浮动 dock、面包屑上下文栏、页脚
 - 外观面板：12 套配色、明暗/跟随系统、宽度 / 模糊 / 噪点滑杆
 - 文章页：元信息、正文排版、可固定目录面板、阅读进度、上下篇、相关文章、系列进度条与浮层
+  上下文栏会随滚动收起成标题胶囊，点一下展开回面包屑
 - 列表页：分页文章列表、按年月归档、标签、分类、系列
-- 搜索：客户端索引 + `Ctrl+K` 弹窗
+- 搜索：MiniSearch 索引（中日韩按词切分）+ `Ctrl+K` 弹窗，关掉搜索则按钮、弹窗、脚本一并消失
 - 代码块：Shiki 双主题、语言标签、复制、折叠
 - 数学公式：KaTeX 构建时渲染
 - 图表：Mermaid 按需加载，切换主题时重绘
-- 图片：相邻图片自动成组，支持布局切换与灯箱
-- 嵌入组件：按钮、链接卡、标签页、Bilibili、腾讯视频（MDX 组件）
+- 图片：相邻图片自动成组，单按钮在 justified / masonry / grid 之间循环切换，间距、列数等可配置
+- 嵌入组件：按钮、链接卡、标签页（禁用 JS 时也能看到首个面板）、Bilibili、腾讯视频（MDX 组件）
 - 独立页：关于、简历、时间线、项目
-- 评论：giscus、disqus、utterances、waline、artalk、twikoo、comentario
+- 评论：giscus、disqus、utterances、waline、artalk、twikoo、comentario，主题切换自动同步
 - 统计：Google、百度、Clarity、Umami
-- 界面语言：由上游 i18n 文件生成的 13 种语言
+- 界面语言：由上游 i18n 文件生成的 14 种语言
 - 订阅与元数据：RSS、sitemap、SVG 图标 sprite、web manifest
 
 ## 功能开关
@@ -37,8 +38,8 @@
 | `announcement.enabled` | `false` | 不显示公告条 |
 | `toc.enabled` | `true` | 无目录面板，dock 上的目录按钮一并隐藏 |
 | `readingProgress.enabled` | `true` | 无阅读进度条 |
-| `search` | 始终开启 | 搜索索引端点仍会生成 |
-| `comments.enabled` + `system` | `false` | 无评论结构；需填对应服务商配置 |
+| `search.enabled` | `true` | dock 上的搜索按钮、弹窗、搜索脚本全部不加载，索引端点返回 `[]` |
+| `comments.enabled` + `provider` | `false` | 无评论结构；需填对应服务商配置 |
 | `analytics.provider` | `""` | 不加载统计脚本 |
 | `katex.enabled` | `true` | 公式保持原文，KaTeX 插件不注册 |
 | `mermaid.enabled` | `true` | 图表按代码块显示，运行时不加载 |
@@ -47,13 +48,18 @@
 | `codeblock.collapse.enabled` | `true` | 无折叠按钮 |
 | `post.showRelated` | `true` | 无相关文章区块 |
 
+> 从 1.x 升级：`comments.system` 已更名为 `comments.provider`（站点配置与文章 front matter 都是），
+> 沿用旧键名会显示「未配置」提示。搜索新增 `search.enabled`，默认开启，行为与之前一致。
+
 ### 页面级覆盖
 
 单篇文章可以在 front matter 里覆盖站点默认值：
 
 ```yaml
 toc: false
-comments: false # 或 { enabled: true, system: "giscus" }
+comments: false # 或 { enabled: true, provider: "giscus" }
+gallery:
+  defaultLayout: masonry # 覆盖站点默认，还可写 gap / columns / targetRowHeight / columnWidth
 katex: false
 mermaid: false
 lightbox: false
@@ -66,6 +72,9 @@ license: "CC BY-ND 4.0" # 或 false 隐藏
 
 - 内容级多语言路由（界面文案可切换，文章保持单语言）
 - 上游脚本自带的三种画廊布局之外的扩展
+- 本地图片的响应式宽度阶梯与 WebP 变体。上游只对 Hugo 的 page bundle / `assets` 资源做处理，
+  Markdown 里的普通路径与静态目录图片同样保持原样；Astro 侧需要响应式图片时用 MDX 里的
+  `<Image>` / `<Picture>`，由 `astro:assets` 在构建期生成。
 
 ## 环境要求
 

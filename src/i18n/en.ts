@@ -49,6 +49,7 @@ export const en: Dict = {
     tocPin: "Pin table of contents",
     tocUnpin: "Unpin table of contents",
     tocClose: "Close table of contents",
+    galleryLayoutSwitch: "Switch gallery layout",
 
     searchClear: "Clear",
     searchPlaceholder: "Search posts...",

@@ -12,10 +12,12 @@ function toSymbol(path: string, raw: string): string {
     .pop()!
     .replace(/\.svg$/, "")
   const content = raw
-    .replace(/\s+width="[^"]*"/g, "")
-    .replace(/\s+height="[^"]*"/g, "")
     .replace(/<svg(\s[^>]*)?>/, `<symbol id="icon-${name}"$1>`)
     .replace(/<\/svg>\s*$/, "</symbol>")
+    // Drop the width/height on the root only: the rects and lines inside an
+    // icon need their own sizes to keep drawing.
+    .replace(/(<symbol id="icon-[^"]*"[^>]*?)\s+width="[^"]*"/, "$1")
+    .replace(/(<symbol id="icon-[^"]*"[^>]*?)\s+height="[^"]*"/, "$1")
   return content.trim()
 }
 

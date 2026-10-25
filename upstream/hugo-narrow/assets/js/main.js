@@ -1,10 +1,10 @@
 import { initAnnouncement } from "./announcement.js";
 import { initAppearance } from "./appearance.js";
 import { initCodeBlocks } from "./codeblock.js";
+import { initContextBar } from "./context-bar.js";
 import { initDock } from "./dock.js";
 import { initFoldLayout } from "./fold.js";
 import { initPopovers } from "./popovers.js";
-import { initSearch } from "./search.js";
 import { initTabs } from "./tabs.js";
 import { initViewportControls } from "./viewport.js";
 
@@ -13,7 +13,7 @@ function boot() {
   initViewportControls();
   initPopovers();
   initFoldLayout();
-  initSearch();
+  initContextBar();
   initDock();
   initAnnouncement();
   initTabs();

@@ -6,5 +6,5 @@
     }
   },
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "upstream"]
+  "exclude": ["dist", "upstream", "src/scripts/vendor"]
 }

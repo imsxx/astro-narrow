@@ -46,15 +46,17 @@ import { url } from "@/lib/url"
       <Icon name="menu" size="sm" />
     </button>
 
-    <button
-      id="dock-search"
-      type="button"
-      class="dock-item"
-      title={t.ui.dockSearch}
-      aria-label={t.ui.dockSearch}
-    >
-      <Icon name="search" size="sm" />
-    </button>
+    {siteConfig.search.enabled && (
+        <button
+          id="dock-search"
+          type="button"
+          class="dock-item"
+          title={t.ui.dockSearch}
+          aria-label={t.ui.dockSearch}
+        >
+          <Icon name="search" size="sm" />
+        </button>
+      )}
 
     {showToc && (
         <>

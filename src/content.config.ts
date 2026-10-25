@@ -23,17 +23,22 @@ const posts = defineCollection({
         z.boolean(),
         z.object({
           enabled: z.boolean(),
-          system: z
-            .enum([
-              "giscus",
-              "disqus",
-              "utterances",
-              "waline",
-              "artalk",
-              "twikoo",
-              "comentario",
-            ])
-            .optional(),
+          /** Provider name, e.g. `giscus`; falls back to the site setting. */
+          provider: z.string().optional(),
+        }),
+      ])
+      .optional(),
+    gallery: z
+      .union([
+        z.boolean(),
+        z.object({
+          enabled: z.boolean().optional(),
+          defaultLayout: z.enum(["justified", "masonry", "grid"]).optional(),
+          gap: z.number().optional(),
+          targetRowHeight: z.number().optional(),
+          lastRowBehavior: z.enum(["center", "start", "justify"]).optional(),
+          columnWidth: z.number().optional(),
+          columns: z.number().int().min(1).optional(),
         }),
       ])
       .optional(),

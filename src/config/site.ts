@@ -32,6 +32,7 @@ const siteSchema = z.object({
     "zh-hant",
     "en",
     "ar",
+    "bn",
     "de",
     "es",
     "fr",
@@ -78,6 +79,7 @@ const siteSchema = z.object({
   }),
   search: z
     .object({
+      enabled: z.boolean().default(true),
       indexContentLength: z.number().int().positive().default(2000),
     })
     .prefault({}),
@@ -105,17 +107,8 @@ const siteSchema = z.object({
   comments: z
     .object({
       enabled: z.boolean().default(false),
-      system: z
-        .enum([
-          "giscus",
-          "disqus",
-          "utterances",
-          "waline",
-          "artalk",
-          "twikoo",
-          "comentario",
-        ])
-        .default("giscus"),
+      /** Provider name; must match a block below (upstream allows custom partials). */
+      provider: z.string().default(""),
       giscus: z
         .object({
           repo: z.string().default(""),
@@ -162,6 +155,11 @@ const siteSchema = z.object({
       defaultLayout: z
         .enum(["justified", "masonry", "grid"])
         .default("justified"),
+      gap: z.number().default(10),
+      targetRowHeight: z.number().default(200),
+      lastRowBehavior: z.enum(["center", "start", "justify"]).default("center"),
+      columnWidth: z.number().default(200),
+      columns: z.number().int().min(1).default(4),
     })
     .prefault({}),
   lightbox: z.object({ enabled: z.boolean().default(true) }).prefault({}),
@@ -221,7 +219,7 @@ export const siteConfig = siteSchema.parse({
     avatar: "",
     social: [],
   },
-  search: { indexContentLength: 2000 },
+  search: { enabled: true, indexContentLength: 2000 },
   base: "/",
   contentWidth: "56rem",
   backdropBlur: 12,
@@ -239,7 +237,7 @@ export const siteConfig = siteSchema.parse({
   },
   comments: {
     enabled: false,
-    system: "giscus",
+    provider: "",
     giscus: {
       repo: "",
       repoId: "",
@@ -273,7 +271,15 @@ export const siteConfig = siteSchema.parse({
   },
   katex: { enabled: true },
   mermaid: { enabled: true },
-  gallery: { enabled: true, defaultLayout: "justified" },
+  gallery: {
+    enabled: true,
+    defaultLayout: "justified",
+    gap: 10,
+    targetRowHeight: 200,
+    lastRowBehavior: "center",
+    columnWidth: 200,
+    columns: 4,
+  },
   lightbox: { enabled: true },
   codeblock: {
     collapse: {

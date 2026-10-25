@@ -27,6 +27,8 @@ type Props = {
   noindex?: boolean
   crumbs?: Crumb[]
   series?: SeriesContext | null
+  /** Article pages get the collapsible context bar; other page kinds keep the trail. */
+  article?: boolean
   headings?: MarkdownHeading[]
   showReadingProgress?: boolean
   hasMermaid?: boolean
@@ -34,6 +36,8 @@ type Props = {
   tocEnabled?: boolean
   commentsEnabled?: boolean
   lightboxEnabled?: boolean
+  /** Page-level gallery overrides, merged over the site defaults. */
+  gallery?: Partial<typeof siteConfig.gallery>
 }
 
 const {
@@ -43,6 +47,7 @@ const {
   noindex = false,
   crumbs,
   series,
+  article = false,
   headings,
   showReadingProgress = siteConfig.readingProgress.enabled,
   hasMermaid = false,
@@ -50,12 +55,20 @@ const {
   tocEnabled = siteConfig.toc.enabled,
   commentsEnabled = siteConfig.comments.enabled,
   lightboxEnabled = siteConfig.lightbox.enabled,
+  gallery: pageGallery,
 } = Astro.props
 
 const hasToc = Boolean(
   tocEnabled &&
     headings?.some((heading) => heading.depth === 2 || heading.depth === 3),
 )
+
+/** Site gallery defaults with the page's own overrides applied. */
+const galleryConfig = { ...siteConfig.gallery, ...pageGallery }
+/** Upstream only wires the gallery/lightbox when the page actually has figures. */
+const galleryActive = Boolean(galleryConfig.enabled && hasImages)
+const lightboxActive = Boolean(lightboxEnabled && hasImages)
+const searchEnabled = siteConfig.search.enabled
 
 const canonical = new URL(Astro.url.pathname, Astro.site)
 const ogImage = new URL(
@@ -213,7 +226,13 @@ import { url } from "@/lib/url"
 
     <div id="page-container" style={pageStyle}>
       <Announcement />
-      {crumbs && crumbs.length > 0 && <ContextBar crumbs={crumbs} series={series} />}
+      {crumbs && crumbs.length > 0 && (
+        <ContextBar
+          crumbs={crumbs}
+          series={series}
+          collapsible={article}
+        />
+      )}
 
       <main id="main-content" tabindex="-1" class="page-main">
         <div class="page-content">
@@ -226,26 +245,37 @@ import { url } from "@/lib/url"
 
     <Dock showToc={hasToc} showComments={commentsEnabled} />
     {hasToc && headings && <Toc headings={headings} />}
-    <SearchModal />
+    {searchEnabled && <SearchModal />}
     <NavMenu />
     <Mermaid enabled={hasMermaid} />
-    <Gallery enabled={siteConfig.gallery.enabled && hasImages} />
+    <Gallery gallery={galleryActive} lightbox={lightboxActive} />
     <script
       id="gallery-config"
       type="application/json"
       set:html={JSON.stringify({
-        gallery: siteConfig.gallery.enabled,
-        lightbox: lightboxEnabled,
-        galleryOptions: { layout: siteConfig.gallery.defaultLayout },
+        gallery: galleryActive,
+        lightbox: lightboxActive,
+        galleryOptions: {
+          defaultLayout: galleryConfig.defaultLayout,
+          gap: galleryConfig.gap,
+          targetRowHeight: galleryConfig.targetRowHeight,
+          lastRowBehavior: galleryConfig.lastRowBehavior,
+          columnWidth: galleryConfig.columnWidth,
+          columns: galleryConfig.columns,
+        },
       })}
     />
 
     <Analytics />
-    <script
-      id="search-config"
-      type="application/json"
-      set:html={JSON.stringify({ searchIndexURL: url("/search-index.json") })}
-    />
+    {searchEnabled && (
+      <script
+        id="search-config"
+        type="application/json"
+        set:html={JSON.stringify({
+          searchIndexURL: url("/search-index.json"),
+        })}
+      />
+    )}
     <slot name="overlays" />
 
     <script>
