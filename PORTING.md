@@ -1,6 +1,6 @@
 # Porting map
 
-Upstream snapshot: `hugo-narrow v2.1.2`.
+Upstream snapshot: `hugo-narrow v2.1.3`.
 Status values: **copied** (verbatim, safe to overwrite), **rewritten** (same behaviour, Astro
 structure), **replaced** (upstream logic dropped because Astro has a native equivalent).
 
@@ -61,7 +61,7 @@ column.
 | `layouts/_partials/content/related-posts.html` | `src/components/content/RelatedPosts.astro` | rewritten |
 | `layouts/_partials/content/post-meta.html` | inline in `posts/[...slug].astro` | rewritten |
 | `layouts/_partials/content/image-processor.html` + `config/image.html` | — | replaced (`astro:assets`; see below) |
-| `layouts/_markup/render-codeblock.html` | `src/lib/rehype/code-block.ts` | rewritten |
+| `layouts/_markup/render-codeblock.html` | `src/lib/rehype/code-block.ts` | rewritten (`.highlight` wrapper + `.chroma` shim, see below) |
 | `layouts/_markup/render-blockquote.html` | `src/lib/rehype/alert.ts` | rewritten |
 | `layouts/_markup/render-image.html` | `src/lib/rehype/image-attrs.ts` | rewritten |
 | `layouts/_markup/render-heading.html` | — | replaced (Astro heading slugs) |
@@ -113,6 +113,14 @@ The port renders every markdown image as a plain `<img>` with `loading="lazy"` /
 and the `figure.image-figure` shell the gallery scripts expect, so those images match upstream's
 static branch. `astro:assets` handles the processed case instead, through `<Image>` / `<Picture>` in
 MDX; `params.image.webp` and `params.image.quality` have no counterpart here.
+
+### Code blocks
+
+Shiki renders the blocks, but the markup keeps two hooks the upstream stylesheet expects: the
+inner `<pre>` carries `chroma` (so `.chroma` rules still land) and sits inside a `div.highlight`
+wrapper. Upstream moved padding, scrolling and typography onto `.highlight` in v2.1.3 — Chroma emits
+that wrapper itself, Shiki does not, so `code-block.ts` adds it. Without it the block loses its
+padding and the syntax background shows as an inner panel.
 
 ## Shortcodes → MDX components
 

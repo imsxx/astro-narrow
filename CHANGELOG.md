@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.2
+
+Syncs `hugo-narrow v2.1.3`. Upstream's fixes are all Chroma-specific, but one of them changed the
+shape of the code-block stylesheet, which this port reuses.
+
+- Fix: code blocks keep their padding and stay flat after the upstream stylesheet moved those rules
+  from `.chroma` onto Chroma's `.highlight` wrapper. Shiki does not emit that wrapper, so the rehype
+  plugin now adds it around the `<pre>`. Without it the block lost its 1rem padding and Shiki's
+  syntax background showed as a grey panel inside the bordered container.
+- The rest of v2.1.3 has no counterpart here: `lineNumbersInTable`, `noClasses` and the copy-source
+  `<pre>` all describe Hugo's HTML minifier and Chroma's table layout. Astro preserves the
+  indentation in the copy source already, and this port renders line numbers itself.
+
 ## 2.0.1
 
 Syncs `hugo-narrow v2.1.1` and `v2.1.2` (the last patches on the upstream v2 line).

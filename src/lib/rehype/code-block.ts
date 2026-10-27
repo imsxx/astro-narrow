@@ -139,7 +139,10 @@ function buildShell(pre: HastNode, index: number) {
         ],
       ),
       h("div", { class: "code-block-content relative", id: codeId }, [
-        pre,
+        // Upstream's Chroma wrapper: padding, scrolling and typography live on
+        // `.highlight`, while the inner <pre> stays flush. Shiki's <pre> carries
+        // the `.chroma` class, so it needs the same parent to inherit that CSS.
+        h("div", { class: "highlight" }, [pre]),
         h("div", { hidden: true, "data-code-source": "" }, source),
         h(
           "div",
