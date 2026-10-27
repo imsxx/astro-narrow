@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.0.1
+
+Syncs `hugo-narrow v2.1.1` and `v2.1.2` (the last patches on the upstream v2 line).
+
+- Fix: the dock's comments button now appears only on pages that actually render a comments section.
+  Before, enabling comments site-wide put a button on every page, including ones with nothing to
+  scroll to. Pages opt in by rendering the component; other page kinds stay clean.
+- Internal: `src/scripts/vendor` is renamed to `src/scripts/lib` to match upstream. The vendored
+  bundles are unchanged; only the two import paths and the `tsconfig` exclude moved.
+- Same behaviour as before (verified against the upstream templates): the lightbox flag and the
+  Mermaid block already render without template-indentation artefacts, so upstream's fixes there
+  needed no port. The remaining diff is Hugo-specific formatting and CRLF handling.
+
 ## 2.0.0
 
 Syncs `hugo-narrow v2.1.0`.

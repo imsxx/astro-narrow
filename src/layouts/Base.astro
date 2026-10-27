@@ -34,6 +34,7 @@ type Props = {
   hasMermaid?: boolean
   hasImages?: boolean
   tocEnabled?: boolean
+  /** Set by pages that actually render a comments section, not by the site switch. */
   commentsEnabled?: boolean
   lightboxEnabled?: boolean
   /** Page-level gallery overrides, merged over the site defaults. */
@@ -53,7 +54,9 @@ const {
   hasMermaid = false,
   hasImages = false,
   tocEnabled = siteConfig.toc.enabled,
-  commentsEnabled = siteConfig.comments.enabled,
+  // Upstream keys the dock button off "this page rendered a comments section"
+  // (a store flag), not off the site switch, so pages without one stay clean.
+  commentsEnabled = false,
   lightboxEnabled = siteConfig.lightbox.enabled,
   gallery: pageGallery,
 } = Astro.props

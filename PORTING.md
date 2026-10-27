@@ -1,6 +1,6 @@
 # Porting map
 
-Upstream snapshot: `hugo-narrow v2.1.0`.
+Upstream snapshot: `hugo-narrow v2.1.2`.
 Status values: **copied** (verbatim, safe to overwrite), **rewritten** (same behaviour, Astro
 structure), **replaced** (upstream logic dropped because Astro has a native equivalent).
 
@@ -28,7 +28,7 @@ column.
 | `assets/icons/*.svg` | `src/icons/*.svg` | copied |
 | `layouts/_partials/features/icon-sprite.html` | `src/pages/icons/sprite.svg.ts` | rewritten |
 | `assets/js/*.js` | `src/scripts/*.js` | copied |
-| `assets/js/vendor/*.js` (MiniSearch, smart-gallery) | `src/scripts/vendor/*.js` | copied (vendored bundle, not edited) |
+| `assets/js/lib/*.js` (MiniSearch, smart-gallery) | `src/scripts/lib/*.js` | copied (vendored bundle, not edited) |
 | `assets/js/theme-init.js` | inline script in `src/layouts/Base.astro` | rewritten (Hugo templating removed) |
 
 ## Layouts
@@ -101,6 +101,9 @@ content schema and merged over `siteConfig.gallery` in the page. The rest are re
 component.
 
 `comments.system` became `comments.provider` in v2.1.0, both in site config and in front matter.
+Since v2.1.2 the dock's comments button follows the page rather than the site switch: upstream sets a
+`hasComments` store flag from the comments partial, so `Base.astro`'s `commentsEnabled` defaults to
+`false` and only pages that render `Comments.astro` turn it on.
 
 ### Images
 
