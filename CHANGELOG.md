@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.3
+
+Syncs `hugo-narrow v2.1.4`. The patch drops the foldable-device layout: foldable screens now use the
+same breakpoint-based layout as every other screen, so content may span the hinge and the dock keeps
+its normal bottom or side placement.
+
+- Removed `src/scripts/fold.js` and its call in `main.js`. Nothing writes `--fold-content-width` or
+  `--fold-margin-start` any more.
+- `#page-container` only reads the content width token; the `100vw` clamp and the fold margin
+  override are gone.
+- Dropped the `horizontal-viewport-segments` / `vertical-viewport-segments` blocks from
+  `components.css` and `toc.css`, and `SIDE_DOCK_QUERY` / `TOC_PIN_QUERY` in `layout.js` are back to
+  their plain breakpoint form.
+
 ## 2.0.2
 
 Syncs `hugo-narrow v2.1.3`. Upstream's fixes are all Chroma-specific, but one of them changed the
